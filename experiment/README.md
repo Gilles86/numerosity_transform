@@ -6,6 +6,9 @@ bid for each cloud in a BDM auction.
 
 ## Run
 
+Easiest: `python start.py` (any Python 3) installs uv if needed, sets up the environment and asks for
+subject, session, mapping, screen and response mode. By hand:
+
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh   # once; installs uv
 cd experiment && uv sync                          # once; creates .venv from uv.lock

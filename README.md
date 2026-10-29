@@ -6,5 +6,5 @@ estimation and a BDM auction. Behavioural port of `abstract_values` with numeros
 The PsychoPy/exptools2 experiment and the participant instruction booklets are in [`experiment/`](experiment/README.md):
 
 ```bash
-python experiment/start.py   # needs uv: curl -LsSf https://astral.sh/uv/install.sh | sh
+python experiment/start.py   # any python 3; installs uv (and the environment) on first run
 ```

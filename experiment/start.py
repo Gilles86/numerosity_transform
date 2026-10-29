@@ -1,6 +1,5 @@
 """Interactive launcher: asks for subject, session, mapping, screen and response mode, then runs all phases.
-python start.py  (any python: re-launches itself inside the project's uv environment)"""
-import os
+python start.py  (any python: installs uv if needed and re-launches itself inside the project's uv environment)"""
 import shutil
 import subprocess
 import sys
@@ -8,8 +7,12 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 if Path(sys.prefix).resolve() != HERE / '.venv':
-    uv = shutil.which('uv') or os.path.expanduser('~/.local/bin/uv')
-    os.execv(uv, [uv, 'run', '--project', str(HERE), 'python', str(HERE / 'start.py')])
+    find_uv = lambda: shutil.which('uv') or shutil.which('uv', path=str(Path.home() / '.local' / 'bin'))
+    if not find_uv():
+        print('uv not found; installing it (https://docs.astral.sh/uv/) ...')
+        subprocess.run(['powershell', '-ExecutionPolicy', 'ByPass', '-c', 'irm https://astral.sh/uv/install.ps1 | iex']
+                       if sys.platform == 'win32' else ['sh', '-c', 'curl -LsSf https://astral.sh/uv/install.sh | sh'], check=True)
+    sys.exit(subprocess.run([find_uv(), 'run', '--project', str(HERE), 'python', str(HERE / 'start.py')]).returncode)
 import yaml
 
 
