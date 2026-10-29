@@ -1,0 +1,9 @@
+# Overrides default.yml for the lab PC; adjust screen/monitor to the actual setup.
+window:
+  size: [1920, 1080]
+  fullscr: True
+  screen: 1
+
+monitor:
+  width: 54.5
+  distance: 100

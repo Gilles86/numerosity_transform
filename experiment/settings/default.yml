@@ -1,0 +1,75 @@
+window:
+  size: [1200, 800]
+  pos: [0, 0]
+  color: [0, 0, 0]
+  fullscr: False
+  winType: pyglet
+  screen: 0
+
+monitor:
+  name: default
+  width: 30
+  distance: 50  # cm
+  gamma: 1
+
+mouse:
+  visible: False
+
+# Numerosity (number of dots) -> value in CHF. Pick one with --mapping.
+mappings:
+  numerosities: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
+  linear:  [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
+  concave: [6.0, 11.5, 16.5, 21.0, 24.5, 28.0, 31.0, 33.5, 36.0, 38.0, 39.5, 41.5, 42.5, 44.0, 45.0, 46.0, 46.5, 47.5, 48.0, 48.5, 49.0, 49.5, 50.0]
+  convex:  [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.5, 10.0, 11.0, 12.0, 13.5, 14.5, 16.5, 18.0, 20.0, 22.5, 25.0, 28.0, 31.5, 35.0, 39.5, 44.5, 50.0]
+
+cloud:
+  aperture_radius: 2.5  # deg
+  dot_radius: .1        # deg
+  min_ecc: .4           # deg; no dots closer to the centre (fixation cross half-length .25 + margin)
+
+fixation_cross:
+  size: 0.5
+  color: white
+  line_width: 5
+
+response: typing  # type the number, ENTER confirms; or slider (mouse, click confirms). --response overrides
+
+slider:
+  length: 10
+  height: .5
+  range: [6, 50]
+  precision: 0.5
+  text_height: .5
+
+various:
+  text_width: 30
+  text_height: .6
+  text_color: [1, 1, 1]
+
+# Seconds
+durations:  # main task
+  green_fixation: 0.3
+  white_fixation: 0.2
+  stimulus: 1.0
+  isis: [0.5, 0.75, 1.0]  # sampled per trial
+  response: 4.0
+  feedback: 1.0
+  iti: 0.5
+
+durations_training:
+  green_fixation: 0.3
+  white_fixation: 0.2
+  stimulus: 1.0
+  response: 5.0
+  feedback: 1.0
+  iti: 0.5
+
+training:
+  n_repeats: 6  # presentations of each numerosity
+  n_blocks: 6
+
+main_task:
+  n_repeats: 2  # presentations of each numerosity per run
+  n_runs: 4
+  reward_scaling: 184.0  # = n_runs x n_repeats x 23 trials, so the payout is the mean trial outcome (as in abstract_values)
+  show_up_fee: 30.0      # CHF (abstract_values v5 booklets; TODO confirm)

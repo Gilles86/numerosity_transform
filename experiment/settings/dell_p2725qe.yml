@@ -1,0 +1,13 @@
+# Dell P2725QE (27", 3840x2160, active area 59.67 x 33.57 cm, up to 120 Hz) at ~50 cm. Overrides default.yml.
+# window.size must equal the resolution the OS reports for this screen: [3840, 2160] at 100% scaling;
+# with OS scaling (e.g. Windows 200% or macOS "looks like 1920x1080") use the scaled size, e.g. [1920, 1080].
+# Degrees stay correct either way, because exptools2 maps monitor.width onto window.size pixels.
+window:
+  size: [3008, 1692]  # macOS "looks like" size on your M1 Pro setup; [3840, 2160] on a PC at 100% scaling
+  fullscr: True
+  screen: 0
+
+monitor:
+  name: dell_p2725qe
+  width: 59.67  # cm
+  distance: 50  # cm

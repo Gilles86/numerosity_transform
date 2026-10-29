@@ -1,0 +1,37 @@
+phase_1: |
+  Learn the monetary value (in CHF) associated with each number of dots.
+
+  - Use the RIGHT ARROW to see the next number of dots, the LEFT ARROW to go back.
+
+  - Press the SPACE BAR when you are done. You can only continue after you have seen all numbers of dots.
+
+  - Take your time: this phase is self-paced.
+
+phase_2: |
+  Estimate the value of each number of dots.
+
+  - A cloud of dots appears in the center of the screen.
+
+  - Then {how}
+
+  - You have 5 seconds per trial.
+
+  - After each estimate you see the correct value (green = correct, red = incorrect).
+
+phase_3: |
+  Run {run} of {n_runs}
+
+  Bid for the dots in an auction.
+
+  - A cloud of dots appears in the center of the screen.
+
+  - Then {how}
+
+  - You have 4 seconds per trial.
+
+  - Bid your true value to maximize your earnings!
+
+  - No feedback is given.
+
+how_slider: 'a slider appears: move the mouse to set your answer, and click to confirm.'
+how_typing: 'a box appears: type your answer (e.g. 23.5) and press ENTER to confirm.'

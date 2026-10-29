@@ -1,0 +1,16 @@
+[project]
+name = "numerosity_transform"
+version = "0.1.0"
+description = "Numerosity-to-value estimation and BDM auction task"
+authors = [{name = "Gilles de Hollander", email = "gilles.dehollander@econ.uzh.ch"}]
+requires-python = "==3.10.*"
+dependencies = [
+    "exptools2",
+    "psychopy>=2026.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+exptools2 = { git = "https://github.com/VU-Cog-Sci/exptools2" }
