@@ -6,10 +6,13 @@ p.add_argument('subject')
 p.add_argument('session', type=int)
 p.add_argument('run', type=int)
 p.add_argument('--mapping', required=True, choices=['linear', 'concave', 'convex'])
+p.add_argument('--stimulus', choices=['dots', 'numeral'], default='dots', help='Dot clouds, or Arabic numerals (0-100, two decimals)')
 p.add_argument('--settings', default='default')
 p.add_argument('--response', choices=['slider', 'typing'], help='Overrides `response` in the settings')
 p.add_argument('--n_trials', type=int, help='Run only this many trials (testing)')
 a = p.parse_args()
+if a.stimulus == 'numeral' and a.mapping == 'linear':
+    p.error('the numeral version exists for the concave and convex mappings only')
 import numpy as np
 from common import BaseSession, InstructionTrial, EstimationTrial
 
@@ -25,19 +28,17 @@ class TaskSession(BaseSession):
         """Random price from the slider range; if bid > price, pay the price and receive the value."""
         lo, hi = self.settings['slider']['range']
         precision = self.settings['slider']['precision']
-        price = round(np.random.uniform(lo, hi) / precision) * precision
+        price = round(round(np.random.uniform(lo, hi) / precision) * precision, 2)
         return price, hi + value - price if bid > price else hi
 
     def create_trials(self, n_trials=None):
         m = self.settings['main_task']
-        numerosities = np.tile(self.settings['mappings']['numerosities'], m['n_repeats'])
-        np.random.shuffle(numerosities)
-        numerosities = numerosities[:n_trials]
-        isis = np.random.choice(self.settings['durations']['isis'], len(numerosities))
+        stimuli = self.sample_stimuli(m['n_repeats'])[:n_trials]
+        isis = np.random.choice(self.settings['durations']['isis'], len(stimuli))
 
         self.trials = [InstructionTrial(self, 0, self.instructions['phase_3'].format(run=self.settings['run'], n_runs=m['n_runs'], how=self.instructions['how']))]
-        self.trials += [EstimationTrial(self, i + 1, int(n), training=False, isi=isi)
-                        for i, (n, isi) in enumerate(zip(numerosities, isis))]
+        self.trials += [EstimationTrial(self, i + 1, n.item(), training=False, isi=isi)
+                        for i, (n, isi) in enumerate(zip(stimuli, isis))]
 
     def run(self):
         self.start_experiment()
@@ -56,6 +57,6 @@ class TaskSession(BaseSession):
 
 
 if __name__ == '__main__':
-    s = TaskSession(a.subject, a.session, a.mapping, run=a.run, settings=a.settings, response=a.response)
+    s = TaskSession(a.subject, a.session, a.mapping, run=a.run, settings=a.settings, response=a.response, stimulus=a.stimulus)
     s.create_trials(a.n_trials)
     s.run()

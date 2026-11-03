@@ -11,9 +11,10 @@ a = p.parse_args()
 fee = yaml.safe_load((HERE / 'settings' / 'default.yml').read_text())['main_task']['show_up_fee']
 
 total, n_sessions = 0., 0
-for ses in sorted((HERE / 'logs' / f'sub-{a.subject.zfill(2)}').glob('ses-*')):
+sub = f'sub-{a.subject.zfill(2)}'
+for ses in sorted([*(HERE / 'logs' / sub).glob('ses-*'), *(HERE / 'logs' / 'numerals' / sub).glob('ses-*')]):  # dots, numerals
     rewards = {f.stem: float(f.read_text()) for f in sorted(ses.glob('reward_*.txt'))}
-    print(f'{ses.name}: {len(rewards)} runs, {sum(rewards.values()):.2f} CHF')
+    print(f'{"numerals " * (ses.parent.parent.name == "numerals")}{ses.name}: {len(rewards)} runs, {sum(rewards.values()):.2f} CHF')
     for name, reward in rewards.items():
         print(f'  {name}: {reward:.2f}')
     total += sum(rewards.values())

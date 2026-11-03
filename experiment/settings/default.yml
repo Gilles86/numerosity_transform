@@ -22,6 +22,16 @@ mappings:
   concave: [6.0, 11.5, 16.5, 21.0, 24.5, 28.0, 31.0, 33.5, 36.0, 38.0, 39.5, 41.5, 42.5, 44.0, 45.0, 46.0, 46.5, 47.5, 48.0, 48.5, 49.0, 49.5, 50.0]
   convex:  [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.5, 10.0, 11.0, 12.0, 13.5, 14.5, 16.5, 18.0, 20.0, 22.5, 25.0, 28.0, 31.5, 35.0, 39.5, 44.5, 50.0]
 
+# Arabic-numeral version (--stimulus numeral, concave and convex only). Values span slider.range, as for the dots.
+numeral:
+  range: [0, 100]
+  decimals: 2
+  text_height: 1.0           # deg
+  n_bins: 23                 # one random number per bin per repeat; also the number of screens in the examples phase
+  curvature: 2.79            # k in (1 - exp(-k x)) / (1 - exp(-k)); least-squares fit to the concave table above
+  response_precision: 0.01   # CHF; replaces slider.precision (typed answers, slider steps, auction prices)
+  feedback_tolerance: 0.5    # CHF; training feedback is green within this distance of the true value
+
 cloud:
   aperture_radius: 2.5  # deg
   dot_radius: .1        # deg

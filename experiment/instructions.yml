@@ -35,3 +35,41 @@ phase_3: |
 
 how_slider: 'a slider appears: move the mouse to set your answer, and click to confirm.'
 how_typing: 'a box appears: type your answer (e.g. 23.5) and press ENTER to confirm.'
+how_typing_numeral: 'a box appears: type your answer (e.g. 23.45) and press ENTER to confirm.'
+
+phase_1_numeral: |
+  Learn the monetary value (in CHF) associated with numbers between 0 and 100.
+
+  - Use the RIGHT ARROW to see the next number, the LEFT ARROW to go back.
+
+  - Press the SPACE BAR when you are done. You can only continue after you have seen all numbers on this list.
+
+  - Later you will also see numbers that are not on this list, so learn how the value changes with the number.
+
+  - Take your time: this phase is self-paced.
+
+phase_2_numeral: |
+  Estimate the value of each number.
+
+  - A number with two decimals appears in the center of the screen.
+
+  - Then {how}
+
+  - You have 5 seconds per trial.
+
+  - After each estimate you see the correct value (green = within 0.50 CHF, red = further away).
+
+phase_3_numeral: |
+  Run {run} of {n_runs}
+
+  Bid for the numbers in an auction.
+
+  - A number with two decimals appears in the center of the screen.
+
+  - Then {how}
+
+  - You have 4 seconds per trial.
+
+  - Bid your true value to maximize your earnings!
+
+  - No feedback is given.

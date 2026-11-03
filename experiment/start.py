@@ -1,4 +1,4 @@
-"""Interactive launcher: asks for subject, session, mapping, screen and response mode, then runs all phases.
+"""Interactive launcher: asks for subject, session, stimulus, mapping, screen and response mode, then runs all phases.
 python start.py  (any python: installs uv if needed and re-launches itself inside the project's uv environment)"""
 import shutil
 import subprocess
@@ -33,7 +33,8 @@ def ask(question, options=None, default=None):
 
 subject = ask('Subject (number or name, letters/digits only)')
 session = ask('Session', default='1')
-mapping = ask('Mapping', ['linear', 'concave', 'convex'])
+stimulus = ask('Stimulus', ['dots', 'numeral'], default='dots')
+mapping = ask('Mapping', ['concave', 'convex'] if stimulus == 'numeral' else ['linear', 'concave', 'convex'])
 settings = ask('Screen settings', sorted(f.stem for f in (HERE / 'settings').glob('*.yml')), default='dell_p2725qe')
 response = ask('Response', ['typing', 'slider'], default='typing')
 
@@ -41,12 +42,12 @@ n_runs = yaml.safe_load((HERE / 'settings' / 'default.yml').read_text())['main_t
 phases = ['examples', 'training'] + [f'run{r}' for r in range(1, n_runs + 1)]
 start = ask('Start at phase (to resume after a crash)', phases, default='examples')
 
-log_dir = HERE / 'logs' / f'sub-{subject.zfill(2)}' / f'ses-{session}'
+log_dir = HERE / 'logs' / ('numerals' if stimulus == 'numeral' else '') / f'sub-{subject.zfill(2)}' / f'ses-{session}'
 if any(log_dir.glob(f'*.{mapping}*')) and ask(f'{log_dir} already has {mapping} files; they may be overwritten. Continue?',
                                                ['y', 'n'], 'n') != 'y':
     sys.exit()
 
-opts = [subject, session, '--mapping', mapping, '--settings', settings]
+opts = [subject, session, '--mapping', mapping, '--stimulus', stimulus, '--settings', settings]
 commands = {'examples': ['examples.py', *opts], 'training': ['training.py', *opts, '--response', response]}
 commands.update({f'run{r}': ['task.py', subject, session, str(r), *opts[2:], '--response', response] for r in range(1, n_runs + 1)})
 for phase in phases[phases.index(start):]:

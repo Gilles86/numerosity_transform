@@ -17,6 +17,11 @@ def get_mappings():
     return yaml.safe_load((HERE / 'settings' / 'default.yml').read_text())['mappings']
 
 
+def get_log_root(stimulus):
+    """Numerals log to their own tree, so the dot-cloud analyses (which glob logs/sub-*) never pick them up."""
+    return HERE / 'logs' / 'numerals' if stimulus == 'numeral' else HERE / 'logs'
+
+
 def load_settings(name='default'):
     """settings/default.yml with settings/<name>.yml merged on top (exptools2 itself only merges onto its own defaults)."""
     settings = yaml.safe_load((HERE / 'settings' / 'default.yml').read_text())
@@ -28,6 +33,16 @@ def load_settings(name='default'):
 def get_value(numerosity, mapping):
     m = get_mappings()
     return m[mapping][m['numerosities'].index(numerosity)]
+
+
+def get_numeral_value(number, mapping, settings):
+    """Value of a numeral: the exponential that the 0.5-CHF numerosity tables are rounded from (max. deviation 0.24 CHF),
+    as a continuous function of number, spanning the slider (= value) range. Convex is concave mirrored in both axes."""
+    n = settings['numeral']
+    x, k = (number - n['range'][0]) / (n['range'][1] - n['range'][0]), n['curvature']
+    concave = lambda x: (1 - np.exp(-k * x)) / (1 - np.exp(-k))
+    lo, hi = settings['slider']['range']
+    return round(float(lo + (hi - lo) * {'concave': concave(x), 'convex': 1 - concave(1 - x)}[mapping]), n['decimals'])
 
 
 def sample_dot_positions(n, aperture_radius, dot_radius, min_ecc=0., max_tries=10000):
@@ -56,6 +71,16 @@ class DotCloud:
             self.dot.draw()
 
 
+class NumeralStim:
+    """An Arabic numeral with a fixed number of decimals, at the centre of the screen (same interface as DotCloud)."""
+
+    def __init__(self, win, number, decimals, text_height):
+        self.text = TextStim(win, f'{number:.{decimals}f}', height=text_height, color=WHITE)
+
+    def draw(self):
+        self.text.draw()
+
+
 class FixationCross:
     def __init__(self, win, size=0.5, color=WHITE, line_width=5):
         self.lines = [Line(win, start=s, end=e, lineWidth=line_width, lineColor=color)
@@ -75,6 +100,7 @@ class ResponseSlider:
 
     def __init__(self, win, pos, length, height, range, precision, text_height):
         self.range, self.precision, self.length, self.x0 = range, precision, length, pos[0]
+        self.decimals = max(1, -int(np.floor(np.log10(precision))))
         self.bar = Rect(win, width=length, height=height, pos=pos, lineColor=(-1, -1, -1), fillColor=(.5, .5, .5))
         self.marker = Rect(win, width=height * .5, height=height * 1.5, pos=pos, lineColor=(-1, -1, -1), fillColor=(.25, .25, .25))
         self.number = TextStim(win, pos=(pos[0], pos[1] - height * 1.5), height=text_height)
@@ -92,9 +118,9 @@ class ResponseSlider:
 
     def set_from_mouse(self, x):
         frac = np.clip((x - self.x0) / self.length + .5, 0, 1)
-        self.value = round((self.range[0] + frac * (self.range[1] - self.range[0])) / self.precision) * self.precision
+        self.value = round(round((self.range[0] + frac * (self.range[1] - self.range[0])) / self.precision) * self.precision, self.decimals)
         self.marker.pos = (self.x0 + ((self.value - self.range[0]) / (self.range[1] - self.range[0]) - .5) * self.length, self.bar.pos[1])
-        self.number.text = f'{self.value:.1f}'
+        self.number.text = f'{self.value:.{self.decimals}f}'
         self.show_marker = True
 
     def draw(self, color=(.25, .25, .25)):
@@ -108,8 +134,9 @@ class ResponseSlider:
 class TypedResponse:
     """Box in which a number is typed; ENTER confirms (only values within `range`)."""
 
-    def __init__(self, win, pos, range, text_height, **kwargs):
+    def __init__(self, win, pos, range, text_height, precision=.5, **kwargs):
         self.range = range
+        self.decimals = max(1, -int(np.floor(np.log10(precision))))  # .5 -> 1 (type 23.5), .01 -> 2 (type 23.45)
         self.box = Rect(win, width=text_height * 6, height=text_height * 2.5, pos=pos, lineColor=WHITE, fillColor=None)
         self.text = TextStim(win, pos=pos, height=text_height * 1.5)
         self.hint = TextStim(win, f'Type a value ({range[0]}-{range[1]}) and press ENTER', pos=(pos[0], pos[1] - text_height * 2.5),
@@ -122,7 +149,8 @@ class TypedResponse:
     def update(self, events, mouse):
         for key, t in events:
             key = key.removeprefix('num_')
-            if key.isdigit() and len(self.typed) < 4:
+            whole, point, decimals = self.typed.partition('.')
+            if key.isdigit() and (len(decimals) < self.decimals if point else len(whole) < 3):
                 self.typed += key
             elif key in ('period', 'comma', 'decimal') and '.' not in self.typed:
                 self.typed += '.'
@@ -162,14 +190,17 @@ class InstructionTrial(Trial):
 class BaseSession(Session):
     """Session with the shared stimuli; subclasses add trials."""
 
-    def __init__(self, subject, session, mapping, task, run=None, settings='default', response=None, response_y=0.):
+    def __init__(self, subject, session, mapping, task, run=None, settings='default', response=None, response_y=0., stimulus='dots'):
         sub = f'sub-{subject.zfill(2)}'
+        settings = load_settings(settings)
+        if stimulus == 'numeral':
+            settings['slider']['precision'] = settings['numeral']['response_precision']
         output_str = f'{sub}_ses-{session}_task-{task}' + (f'_run-{run:02d}' if run else '') + f'.{mapping}'
         settings_file = Path(tempfile.mkstemp(suffix='.yml')[1])
-        settings_file.write_text(yaml.safe_dump(load_settings(settings)))
-        super().__init__(output_str, output_dir=HERE / 'logs' / sub / f'ses-{session}', settings_file=settings_file)
+        settings_file.write_text(yaml.safe_dump(settings))
+        super().__init__(output_str, output_dir=get_log_root(stimulus) / sub / f'ses-{session}', settings_file=settings_file)
         s = self.settings
-        s.update(subject=subject, session=session, mapping=mapping, run=run, response=response or s['response'])
+        s.update(subject=subject, session=session, mapping=mapping, run=run, response=response or s['response'], stimulus=stimulus)
         self.mouse = event.Mouse(visible=False)
         self.fixation = FixationCross(self.win, **s['fixation_cross'])
         self.too_late = TextStim(self.win, 'Too late!', height=.5, color=RED)
@@ -177,7 +208,43 @@ class BaseSession(Session):
         self.response = (TypedResponse(self.win, (0, response_y), **sl) if s['response'] == 'typing' else
                          ResponseSlider(self.win, (0, response_y), sl['length'], sl['height'], sl['range'], sl['precision'], sl['text_height']))
         self.instructions = yaml.safe_load((HERE / 'instructions.yml').read_text())
+        if stimulus == 'numeral':
+            self.instructions.update({k.removesuffix('_numeral'): v for k, v in self.instructions.items() if k.endswith('_numeral')})
         self.instructions['how'] = self.instructions[f'how_{s["response"]}']
+
+    @property
+    def is_numeral(self):
+        return self.settings['stimulus'] == 'numeral'
+
+    @property
+    def levels(self):
+        """The stimuli that can be browsed in the examples phase: 23 numerosities, or 23 evenly spaced numerals."""
+        if self.is_numeral:
+            n = self.settings['numeral']
+            return np.linspace(*n['range'], n['n_bins']).round(n['decimals']).tolist()
+        return self.settings['mappings']['numerosities']
+
+    def sample_stimuli(self, n_repeats):
+        """Shuffled stimuli for n_repeats passes over the range. Numerals: one new random number per bin, per pass, so
+        the range is covered evenly (and trial counts match the dots version) but no number has to come back."""
+        if self.is_numeral:
+            n = self.settings['numeral']
+            edges = np.linspace(*n['range'], n['n_bins'] + 1)
+            stimuli = np.random.uniform(np.tile(edges[:-1], n_repeats), np.tile(edges[1:], n_repeats)).round(n['decimals'])
+        else:
+            stimuli = np.tile(self.settings['mappings']['numerosities'], n_repeats)
+        np.random.shuffle(stimuli)
+        return stimuli
+
+    def make_stimulus(self, x):
+        s = self.settings
+        if self.is_numeral:
+            return NumeralStim(self.win, x, s['numeral']['decimals'], s['numeral']['text_height'])
+        return DotCloud(self.win, x, **s['cloud'])
+
+    def get_value(self, x):
+        s = self.settings
+        return get_numeral_value(x, s['mapping'], s) if self.is_numeral else get_value(x, s['mapping'])
 
     def run(self):
         self.start_experiment()
@@ -187,29 +254,33 @@ class BaseSession(Session):
 
 
 class EstimationTrial(Trial):
-    """Dot cloud -> slider or typed response. Training: cloud stays up and the true value is shown as feedback.
-    Task: BDM auction against a random price, no feedback."""
+    """Dot cloud or numeral -> slider or typed response. Training: stimulus stays up and the true value is shown as
+    feedback. Task: BDM auction against a random price, no feedback."""
 
-    def __init__(self, session, trial_nr, numerosity, training, isi=0.):
+    def __init__(self, session, trial_nr, stimulus, training, isi=0.):
         s = session.settings
         d = s['durations_training' if training else 'durations']
         names = ['green_fixation', 'white_fixation', 'stimulus', 'isi', 'response', 'feedback', 'iti']
         super().__init__(session, trial_nr, [d['green_fixation'], d['white_fixation'], d['stimulus'], isi,
                                              d['response'], d['feedback'], d['iti']], names)
-        self.training, self.numerosity, self.response = training, numerosity, session.response
-        self.cloud = DotCloud(session.win, numerosity, **s['cloud'])
-        self.parameters.update(numerosity=numerosity, value=get_value(numerosity, s['mapping']), mapping=s['mapping'],
+        self.training, self.response = training, session.response
+        self.stimulus = session.make_stimulus(stimulus)
+        self.parameters.update({'number' if session.is_numeral else 'numerosity': stimulus}, stimulus=s['stimulus'],
+                               value=session.get_value(stimulus), mapping=s['mapping'],
                                response_mode=s['response'], response=np.nan, response_time=np.nan, reward=0.)
-        self.feedback = TextStim(session.win, f'{self.parameters["value"]:.1f}', pos=(0, 1.2 * s['cloud']['aperture_radius'] + .5),
+        self.feedback = TextStim(session.win, f'{self.parameters["value"]:.{session.response.decimals}f}', pos=(0, 1.2 * s['cloud']['aperture_radius'] + .5),
                                  height=.75, color=GREEN)
         self.responded = False
 
     def draw(self):
         phase, fix = self.phase_names[self.phase], self.session.fixation
-        show_cloud = phase == 'stimulus' or (self.training and phase in ('response', 'feedback'))
+        if phase == 'response' and not hasattr(self, 't0'):  # response phase just started: clear the previous
+            self.t0 = self.session.clock.getTime()           # answer here, as exptools2 draws before get_events
+            self.response.reset(self.session.mouse)
+        show_stimulus = phase == 'stimulus' or (self.training and phase in ('response', 'feedback'))
         fix.set_color(GREEN if phase == 'green_fixation' else WHITE)
-        if show_cloud:
-            self.cloud.draw()
+        if show_stimulus:
+            self.stimulus.draw()
         if phase in ('response', 'feedback'):
             if phase == 'feedback' and not self.responded:
                 self.session.too_late.draw()
@@ -217,23 +288,22 @@ class EstimationTrial(Trial):
                 self.response.draw(YELLOW) if phase == 'feedback' else self.response.draw()
             if phase == 'feedback' and self.training:
                 self.feedback.draw()
-        if phase in ('green_fixation', 'white_fixation', 'stimulus', 'isi'):
-            fix.draw()
+        if phase in ('green_fixation', 'white_fixation', 'isi') or (phase == 'stimulus' and not self.session.is_numeral):
+            fix.draw()  # a numeral appears on the fixation cross and replaces it; dots leave it free
 
     def get_events(self):
         events = super().get_events()
         if self.phase_names[self.phase] != 'response' or self.responded:
             return
-        if not hasattr(self, 't0'):  # response phase just started
-            self.t0 = self.session.clock.getTime()
-            self.response.reset(self.session.mouse)
         value = self.response.update(events, self.session.mouse)
         if value is not None:
             self.responded = True
             self.parameters['response'] = value
             self.parameters['response_time'] = self.session.clock.getTime() - self.t0
             if self.training:
-                self.feedback.color = GREEN if value == self.parameters['value'] else RED
+                # Numerals have 2-decimal values, so an exact hit would be luck: green within a tolerance
+                tolerance = self.session.settings['numeral']['feedback_tolerance'] if self.session.is_numeral else 0.
+                self.feedback.color = GREEN if abs(value - self.parameters['value']) <= tolerance else RED
             else:
                 self.parameters['price'], self.parameters['reward'] = self.session.auction(value, self.parameters['value'])
             self.stop_phase()
