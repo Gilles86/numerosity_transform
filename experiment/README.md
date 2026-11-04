@@ -1,6 +1,6 @@
 # Numerosity transform
 
-Behavioural (lab) port of the `abstract_values` task. The stimulus is a cloud of dots (6-50 dots, 23 levels); the
+Behavioural (lab) port of the `abstract_values` task. The stimulus is a cloud of dots (1-50 dots, 23 levels); the
 number of dots maps to a monetary value (CHF). Participants learn the mapping, estimate it with feedback, and then
 bid for each cloud in a BDM auction.
 
@@ -30,12 +30,12 @@ response, response_time, price (random BDM price), reward; plus `reward_<sub>_<s
 
 ## Arabic-numeral version
 
-`--stimulus numeral` (or `numeral` in `start.py`; concave and convex only) replaces the dot cloud by a number from 0.00 to
-100.00; step-by-step guide in [`README_numerals.md`](README_numerals.md). The phases, timing, 6-50 CHF value range and auction
-are unchanged. What differs (all in `numeral:` in `settings/default.yml`):
+`--stimulus numeral` (or `numeral` in `start.py`; concave and convex only) replaces the dot cloud by a number from 1.00 to
+50.00; step-by-step guide in [`README_numerals.md`](README_numerals.md). The phases, timing, value range (1-50 CHF), auction and
+reward scaling are unchanged. What differs (all in `numeral:` in `settings/default.yml`):
 
-- Value = 6 + 44 h(x), x = number / 100, with concave h(x) = (1 - exp(-kx)) / (1 - exp(-k)), k = 2.79 and convex 1 - h(1 - x).
-  The numerosity tables are this function rounded to 0.5 CHF (largest deviation 0.24 CHF). Values are rounded to 0.01 CHF.
+- Value = 1 + 49 h(x), x = (number - 1) / 49, with concave h(x) = (1 - exp(-kx)) / (1 - exp(-k)), k = 2.79 and convex 1 - h(1 - x).
+  The numerosity tables are this same curve rounded to 0.5 CHF. Values are rounded to 0.01 CHF.
 - Each pass over the range draws one new random number from each of 23 equal bins (trial counts as for the dots). The examples
   phase shows 23 evenly spaced numbers.
 - The numeral replaces the fixation cross while it is on screen.
@@ -52,16 +52,18 @@ are unchanged. What differs (all in `numeral:` in `settings/default.yml`):
 | `training.py` | 23 x 6 in 6 blocks | 0.3 + 0.2 | 1.0 (stays on during response) | none | up to 5 | 1.0 (true value) | 0.5 |
 | `task.py` | 23 x 2 per run, 4 runs | 0.3 + 0.2 | 1.0 | 0.5 / 0.75 / 1.0 | up to 4 | 1.0 (own answer, no value) | 0.5 |
 
-Auction: random price drawn uniformly from 6-50; if bid > price the participant gets 50 + value - price, otherwise 50.
+Auction: random price drawn uniformly from 1-50; if bid > price the participant gets 50 + value - price, otherwise 50.
 Run reward = sum over trials / `reward_scaling` (184) CHF; show-up fee in `main_task.show_up_fee`.
 
 ## Mappings (numerosity -> CHF)
 
-| Dots | 6 | 8 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 26 | 28 | 30 | 32 | 34 | 36 | 38 | 40 | 42 | 44 | 46 | 48 | 50 |
+Pilot logs from before this range were collected with 6-50 dots (values 6-50) and numbers 0-100 (values 0-100); that design is kept in `analysis/pilot_design.yml`, which the analysis scripts read.
+
+| Dots | 1 | 3 | 5 | 8 | 10 | 12 | 14 | 17 | 19 | 21 | 23 | 25 | 28 | 30 | 32 | 34 | 37 | 39 | 41 | 43 | 46 | 48 | 50 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| linear | 6 | 8 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 26 | 28 | 30 | 32 | 34 | 36 | 38 | 40 | 42 | 44 | 46 | 48 | 50 |
-| concave | 6 | 11.5 | 16.5 | 21 | 24.5 | 28 | 31 | 33.5 | 36 | 38 | 39.5 | 41.5 | 42.5 | 44 | 45 | 46 | 46.5 | 47.5 | 48 | 48.5 | 49 | 49.5 | 50 |
-| convex | 6 | 6.5 | 7 | 7.5 | 8 | 8.5 | 9.5 | 10 | 11 | 12 | 13.5 | 14.5 | 16.5 | 18 | 20 | 22.5 | 25 | 28 | 31.5 | 35 | 39.5 | 44.5 | 50 |
+| linear | 1 | 3 | 5 | 8 | 10 | 12 | 14 | 17 | 19 | 21 | 23 | 25 | 28 | 30 | 32 | 34 | 37 | 39 | 41 | 43 | 46 | 48 | 50 |
+| concave | 1 | 6.5 | 11.5 | 18 | 22 | 25.5 | 28.5 | 32 | 34.5 | 36.5 | 38.5 | 40 | 42 | 43 | 44.5 | 45 | 46.5 | 47 | 48 | 48.5 | 49 | 49.5 | 50 |
+| convex | 1 | 1.5 | 2 | 2.5 | 3 | 4 | 4.5 | 6 | 6.5 | 8 | 9 | 10.5 | 12.5 | 14.5 | 16.5 | 19 | 22.5 | 25.5 | 29 | 33 | 39.5 | 44.5 | 50 |
 
 Dot clouds: aperture radius 2.5 deg, dot radius 0.1 deg, minimum centre distance 2.2 dot radii, no dots within 0.4 deg of fixation; positions are
 resampled on every presentation.

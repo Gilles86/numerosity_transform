@@ -38,7 +38,7 @@ how_typing: 'a box appears: type your answer (e.g. 23.5) and press ENTER to conf
 how_typing_numeral: 'a box appears: type your answer (e.g. 23.45) and press ENTER to confirm.'
 
 phase_1_numeral: |
-  Learn the monetary value (in CHF) associated with numbers between 0 and 100.
+  Learn the monetary value (in CHF) associated with numbers between 1 and 50.
 
   - Use the RIGHT ARROW to see the next number, the LEFT ARROW to go back.
 

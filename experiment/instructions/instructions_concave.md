@@ -12,7 +12,7 @@ Your task today will be to learn the relation between the number of dots
 in a cloud of dots (Figure 1 shows you an example) and its monetary
 value. Each dot cloud has a specific monetary value assigned to it
 according to its number of dots (like a bank note). The number of dots
-ranges from 6 to 50, in steps of 2, so there are 23 different dot
+ranges from 1 to 50, in roughly equal steps, so there are 23 different dot
 clouds. To learn the relation, you will first be shown all possible dot
 clouds together with their corresponding monetary value (Phase 1). After
 that you will be shown a random dot cloud and you need to input the
@@ -29,9 +29,9 @@ phase 2, and according to the difference between the random price set by
 the computer if you won the bid and the resell value of the dot clouds
 you purchased in phase 3.
 
-![](dotcloud_example_24.png){width=1.8in}
+![](dotcloud_example_23.png){width=1.8in}
 
-*Figure 1: Example of a dot cloud (here: 24 dots).*
+*Figure 1: Example of a dot cloud (here: 23 dots).*
 
 **Note:** you will not have time to count the dots one by one. Use your
 impression of how many dots there are. Each dot cloud is shown for 1 second. **TODO(Gilles)**: keep this note?
@@ -61,11 +61,11 @@ to continue.
 ![](dotcloud_example_concave.png){width=1.8in}
 
 *Figure 2: Example of one dot cloud (30 dots) together with its
-corresponding correct value (42.5 CHF) in the middle.*
+corresponding correct value (43 CHF) in the middle.*
 
-The values of the dot clouds range between 6 and 50. The value is a
+The values of the dot clouds range between 1 and 50. The value is a
 function of the number of dots. The exact function is shown in Figure 3.
-As you can see, the relationship between the number of dots and the value is not linear: the value rises steeply for small numbers of dots and then flattens out for large numbers of dots. For example, going from 6 to 12 dots increases the value by 15 CHF (from 6 to 21 CHF), whereas going from 38 to 44 dots increases the value by only 2 CHF (from 46.5 to 48.5 CHF). So, this is what you are supposed to learn.
+As you can see, the relationship between the number of dots and the value is not linear: the value rises steeply for small numbers of dots and then flattens out for large numbers of dots. For example, going from 1 to 8 dots increases the value by 17 CHF (from 1 to 18 CHF), whereas going from 39 to 46 dots increases the value by only 2 CHF (from 47 to 49 CHF). So, this is what you are supposed to learn.
 
 ![](mapping_concave.png){width=4.2in}
 
@@ -86,7 +86,7 @@ Figure 4).
 [Figure: example training trial -- dot cloud, response slider, and feedback; **TODO(Gilles)**: add screenshot of the numerosity version]
 
 *Figure 4: Example of one training trial with negative feedback, where
-the actual value is 42.5 and the input was 3.5.*
+the actual value is 43 and the input was 3.5.*
 
 For each round, your task is to input a monetary value so that it
 matches the value of the number of dots of the dot cloud that you
@@ -154,7 +154,7 @@ willing to pay to get THAT dot cloud and then bid the number closest to
 that value.
 
 What is the rule? At the end of each trial, the computer will choose a
-random price for the dot cloud which will range between 6 and 50 (the
+random price for the dot cloud which will range between 1 and 50 (the
 range of possible values of the dot clouds). If your bid is greater than
 the random price, you will get the dot cloud for the random price. You
 can then sell it in the end for its true value and earn the difference
@@ -177,7 +177,7 @@ earn any additional payout).
 
 For example, suppose that the dot cloud is worth 20 CHF to you. If you
 bid your true value, you will get the dot cloud if the random value is
-anything between 6 and 20 CHF. You will not get the dot cloud if the
+anything between 1 and 20 CHF. You will not get the dot cloud if the
 random value is 20 CHF or above. It follows that by bidding your true
 value you make a "profit" since you always end up paying less than the
 dot cloud is worth to you.
@@ -187,7 +187,7 @@ more than your true value and you win the bid for a price higher than
 the true value, your payout will be negative.)
 
 What happens if you bid less than you true value? For example, suppose
-that you bid 6 CHF even though your true value is 20 CHF. In this case
+that you bid 1 CHF even though your true value is 20 CHF. In this case
 you never get the dot cloud, which is not a good strategy since, when
 you bid your true value, you pretty much always end up paying less than
 the dot cloud is worth to you!
@@ -220,4 +220,4 @@ actually very simple:
     money. (Remember: If you do not submit a bid during a trial, this
     trial does not count as a trial that you participated in!)
 
-6.  Your average payout in the task will be around 63 CHF (on top of the show-up fee).
+6.  Your average payout in the task will be around 64 CHF (on top of the show-up fee).

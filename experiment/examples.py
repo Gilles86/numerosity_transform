@@ -5,7 +5,7 @@ p = argparse.ArgumentParser()
 p.add_argument('subject')
 p.add_argument('session', type=int)
 p.add_argument('--mapping', required=True, choices=['linear', 'concave', 'convex'])
-p.add_argument('--stimulus', choices=['dots', 'numeral'], default='dots', help='Dot clouds, or Arabic numerals (0-100, two decimals)')
+p.add_argument('--stimulus', choices=['dots', 'numeral'], default='dots', help='Dot clouds, or Arabic numerals (1-50, two decimals)')
 p.add_argument('--settings', default='default')
 a = p.parse_args()
 if a.stimulus == 'numeral' and a.mapping == 'linear':

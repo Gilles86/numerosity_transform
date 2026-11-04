@@ -15,20 +15,22 @@ monitor:
 mouse:
   visible: False
 
-# Numerosity (number of dots) -> value in CHF. Pick one with --mapping.
+# Numerosity (number of dots) -> value in CHF. Pick one with --mapping. Numerosities: 23 evenly spaced levels from 1 to 50, rounded to whole dots.
+# Concave/convex: 1 + 49 h(x), x = (n - 1) / 49 (h: see numeral.curvature; convex is 1 - h(1 - x)), rounded to 0.5 CHF.
 mappings:
-  numerosities: [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
-  linear:  [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
-  concave: [6.0, 11.5, 16.5, 21.0, 24.5, 28.0, 31.0, 33.5, 36.0, 38.0, 39.5, 41.5, 42.5, 44.0, 45.0, 46.0, 46.5, 47.5, 48.0, 48.5, 49.0, 49.5, 50.0]
-  convex:  [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.5, 10.0, 11.0, 12.0, 13.5, 14.5, 16.5, 18.0, 20.0, 22.5, 25.0, 28.0, 31.5, 35.0, 39.5, 44.5, 50.0]
+  numerosities: [1, 3, 5, 8, 10, 12, 14, 17, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43, 46, 48, 50]
+  linear:  [1, 3, 5, 8, 10, 12, 14, 17, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43, 46, 48, 50]
+  concave: [1.0, 6.5, 11.5, 18.0, 22.0, 25.5, 28.5, 32.0, 34.5, 36.5, 38.5, 40.0, 42.0, 43.0, 44.5, 45.0, 46.5, 47.0, 48.0, 48.5, 49.0, 49.5, 50.0]
+  convex:  [1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 4.5, 6.0, 6.5, 8.0, 9.0, 10.5, 12.5, 14.5, 16.5, 19.0, 22.5, 25.5, 29.0, 33.0, 39.5, 44.5, 50.0]
 
-# Arabic-numeral version (--stimulus numeral, concave and convex only). Values span slider.range, as for the dots.
+# Arabic-numeral version (--stimulus numeral, concave and convex only). Number 1 is worth 1 CHF and 50 is worth 50 CHF:
+# same range as the numerosities and slider.range.
 numeral:
-  range: [0, 100]
+  range: [1, 50]
   decimals: 2
   text_height: 1.0           # deg
   n_bins: 23                 # one random number per bin per repeat; also the number of screens in the examples phase
-  curvature: 2.79            # k in (1 - exp(-k x)) / (1 - exp(-k)); least-squares fit to the concave table above
+  curvature: 2.79            # k in (1 - exp(-k x)) / (1 - exp(-k)); also generates the mapping tables above
   response_precision: 0.01   # CHF; replaces slider.precision (typed answers, slider steps, auction prices)
   feedback_tolerance: 0.5    # CHF; training feedback is green within this distance of the true value
 
@@ -47,7 +49,7 @@ response: typing  # type the number, ENTER confirms; or slider (mouse, click con
 slider:
   length: 10
   height: .5
-  range: [6, 50]
+  range: [1, 50]
   precision: 0.5
   text_height: .5
 

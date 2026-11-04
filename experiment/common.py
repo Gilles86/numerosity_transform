@@ -36,12 +36,13 @@ def get_value(numerosity, mapping):
 
 
 def get_numeral_value(number, mapping, settings):
-    """Value of a numeral: the exponential that the 0.5-CHF numerosity tables are rounded from (max. deviation 0.24 CHF),
-    as a continuous function of number, spanning the slider (= value) range. Convex is concave mirrored in both axes."""
+    """Value of a numeral: the exponential that the 0.5-CHF numerosity tables are rounded from,
+    as a continuous function of number. Both ends are fixed: range[0] is worth range[0] CHF and range[1] is worth range[1] CHF.
+    Convex is concave mirrored in both axes."""
     n = settings['numeral']
-    x, k = (number - n['range'][0]) / (n['range'][1] - n['range'][0]), n['curvature']
+    (lo, hi), k = n['range'], n['curvature']
+    x = (number - lo) / (hi - lo)
     concave = lambda x: (1 - np.exp(-k * x)) / (1 - np.exp(-k))
-    lo, hi = settings['slider']['range']
     return round(float(lo + (hi - lo) * {'concave': concave(x), 'convex': 1 - concave(1 - x)}[mapping]), n['decimals'])
 
 

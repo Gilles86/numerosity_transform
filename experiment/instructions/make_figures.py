@@ -1,12 +1,13 @@
+import sys
 import numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 OUT="/Users/gdehol/git/numerosity_transform/experiment/instructions/"
-N=list(range(6,51,2))
+N=[1, 3, 5, 8, 10, 12, 14, 17, 19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43, 46, 48, 50]
 M={"linear":[float(n) for n in N],
-"concave":[6.0,11.5,16.5,21.0,24.5,28.0,31.0,33.5,36.0,38.0,39.5,41.5,42.5,44.0,45.0,46.0,46.5,47.5,48.0,48.5,49.0,49.5,50.0],
-"convex":[6.0,6.5,7.0,7.5,8.0,8.5,9.5,10.0,11.0,12.0,13.5,14.5,16.5,18.0,20.0,22.5,25.0,28.0,31.5,35.0,39.5,44.5,50.0]}
+"concave":[1.0,6.5,11.5,18.0,22.0,25.5,28.5,32.0,34.5,36.5,38.5,40.0,42.0,43.0,44.5,45.0,46.5,47.0,48.0,48.5,49.0,49.5,50.0],
+"convex":[1.0,1.5,2.0,2.5,3.0,4.0,4.5,6.0,6.5,8.0,9.0,10.5,12.5,14.5,16.5,19.0,22.5,25.5,29.0,33.0,39.5,44.5,50.0]}
 assert all(len(v)==23 for v in M.values())
 
 def cloud(n,seed,path,center_text=None):
@@ -27,9 +28,9 @@ def cloud(n,seed,path,center_text=None):
 def fmt(v): return f"{v:g}"
 
 DESC={
-"linear":"The relationship is linear: the value of a dot cloud (in CHF) is simply equal to its number of dots. Each additional dot adds the same amount of money, wherever you are on the scale -- for example, a cloud with 20 dots is worth 20 CHF and a cloud with 40 dots is worth 40 CHF. So, this is what you are supposed to learn.",
-"concave":"As you can see, the relationship between the number of dots and the value is not linear: the value rises steeply for small numbers of dots and then flattens out for large numbers of dots. For example, going from 6 to 12 dots increases the value by 15 CHF (from 6 to 21 CHF), whereas going from 38 to 44 dots increases the value by only 2 CHF (from 46.5 to 48.5 CHF). So, this is what you are supposed to learn.",
-"convex":"As you can see, the relationship between the number of dots and the value is not linear: the value rises only slowly for small numbers of dots and then increases steeply for large numbers of dots. For example, going from 6 to 12 dots increases the value by only 1.5 CHF (from 6 to 7.5 CHF), whereas going from 38 to 44 dots increases the value by 10 CHF (from 25 to 35 CHF). So, this is what you are supposed to learn."}
+"linear":"The relationship is linear: the value of a dot cloud (in CHF) is simply equal to its number of dots. Each additional dot adds the same amount of money, wherever you are on the scale -- for example, a cloud with 21 dots is worth 21 CHF and a cloud with 41 dots is worth 41 CHF. So, this is what you are supposed to learn.",
+"concave":"As you can see, the relationship between the number of dots and the value is not linear: the value rises steeply for small numbers of dots and then flattens out for large numbers of dots. For example, going from 1 to 8 dots increases the value by 17 CHF (from 1 to 18 CHF), whereas going from 39 to 46 dots increases the value by only 2 CHF (from 47 to 49 CHF). So, this is what you are supposed to learn.",
+"convex":"As you can see, the relationship between the number of dots and the value is not linear: the value rises only slowly for small numbers of dots and then increases steeply for large numbers of dots. For example, going from 1 to 8 dots increases the value by only 1.5 CHF (from 1 to 2.5 CHF), whereas going from 39 to 46 dots increases the value by 14 CHF (from 25.5 to 39.5 CHF). So, this is what you are supposed to learn."}
 EXN={"linear":30,"concave":30,"convex":30}
 TEMPLATE=open(OUT+"../../.tmpl.md").read() if False else None
 
@@ -47,7 +48,7 @@ Your task today will be to learn the relation between the number of dots
 in a cloud of dots (Figure 1 shows you an example) and its monetary
 value. Each dot cloud has a specific monetary value assigned to it
 according to its number of dots (like a bank note). The number of dots
-ranges from 6 to 50, in steps of 2, so there are 23 different dot
+ranges from 1 to 50, in roughly equal steps, so there are 23 different dot
 clouds. To learn the relation, you will first be shown all possible dot
 clouds together with their corresponding monetary value (Phase 1). After
 that you will be shown a random dot cloud and you need to input the
@@ -66,7 +67,7 @@ you purchased in phase 3.
 
 ![](@FIG1@){width=1.8in}
 
-*Figure 1: Example of a dot cloud (here: 24 dots).* [Figure: example dot cloud with 24 dots]
+*Figure 1: Example of a dot cloud (here: 23 dots).* [Figure: example dot cloud with 23 dots]
 
 **Note:** you will not have time to count the dots one by one. Use your
 impression of how many dots there are. @TODO_NOTE@
@@ -97,7 +98,7 @@ clouds again, you can go back by pressing BACKSPACE. @TODO_KEYS@
 *Figure 2: Example of one dot cloud (@EX@ dots) together with its
 corresponding correct value (@EXV@ CHF) in the middle.* [Figure: example dot cloud with @EX@ dots]
 
-The values of the dot clouds range between 6 and 50. The value is a
+The values of the dot clouds range between 1 and 50. The value is a
 function of the number of dots. The exact function is shown in Figure 3.
 @DESC@
 
@@ -191,7 +192,7 @@ willing to pay to get THAT dot cloud and then bid the number closest to
 that value.
 
 What is the rule? At the end of each trial, the computer will choose a
-random price for the dot cloud which will range between 6 and 50 (the
+random price for the dot cloud which will range between 1 and 50 (the
 range of possible values of the dot clouds). If your bid is greater than
 the random price, you will get the dot cloud for the random price. You
 can then sell it in the end for its true value and earn the difference
@@ -214,7 +215,7 @@ earn any additional payout).
 
 For example, suppose that the dot cloud is worth 20 CHF to you. If you
 bid your true value, you will get the dot cloud if the random value is
-anything between 6 and 20 CHF. You will not get the dot cloud if the
+anything between 1 and 20 CHF. You will not get the dot cloud if the
 random value is 20 CHF or above. It follows that by bidding your true
 value you make a "profit" since you always end up paying less than the
 dot cloud is worth to you.
@@ -224,7 +225,7 @@ more than your true value and you win the bid for a price higher than
 the true value, your payout will be negative.)
 
 What happens if you bid less than you true value? For example, suppose
-that you bid 6 CHF even though your true value is 20 CHF. In this case
+that you bid 1 CHF even though your true value is 20 CHF. In this case
 you never get the dot cloud, which is not a good strategy since, when
 you bid your true value, you pretty much always end up paying less than
 the dot cloud is worth to you!
@@ -261,15 +262,15 @@ actually very simple:
 '''
 TD=lambda s: f"**TODO(Gilles)**: {s}"
 for name,vals in M.items():
-    f1=f"dotcloud_example_24.png"
-    cloud(24,1,OUT+f1)
+    f1=f"dotcloud_example_23.png"
+    cloud(23,1,OUT+f1)
     ex=30; exv=vals[N.index(ex)]
     f2=f"dotcloud_example_{name}.png"; cloud(ex,2,OUT+f2,fmt(exv))
     f3=f"mapping_{name}.png"
     fig,ax=plt.subplots(figsize=(5,3.6))
     ax.plot(N,vals,"-o",color="#1f77b4",ms=4)
     ax.set_xlabel("Number of dots"); ax.set_ylabel("Value (CHF)")
-    ax.set_xlim(4,52); ax.set_ylim(4,52); ax.set_xticks(range(6,51,8)); ax.set_yticks(range(10,51,10))
+    ax.set_xlim(-1,52); ax.set_ylim(-1,52); ax.set_xticks([1,10,20,30,40,50]); ax.set_yticks([1,10,20,30,40,50])
     ax.set_title(f"{name.capitalize()} mapping"); ax.spines[["top","right"]].set_visible(False)
     fig.tight_layout(); fig.savefig(OUT+f3,dpi=200); plt.close(fig)
     t=T
@@ -280,4 +281,5 @@ for name,vals in M.items():
      "TODO_KEYS":"**TODO(Gilles)**: confirm keys for the numerosity version (old: ENTER / BACKSPACE; v5: RIGHT / LEFT ARROW, SPACE BAR to continue)."}
     for k,v in rep.items(): t=t.replace(f"@{k}@",v)
     assert "@" not in t.replace("@@","")
-    open(OUT+f"instructions_{name}.md","w").write(t)
+    if "--booklets" in sys.argv:  # the .md files were finished by hand after this template: a plain run only redraws the figures
+        open(OUT+f"instructions_{name}.md","w").write(t)

@@ -2,7 +2,7 @@
 
 This is a guide for Saurabh to run both numeral versions of the task on himself, from installation to sending the data back.
 
-**What you will do.** You learn how numbers between 0.00 and 100.00 translate into a value in CHF, practise this with
+**What you will do.** You learn how numbers between 1.00 and 50.00 translate into a value in CHF (1 is always worth 1 CHF and 50 is always worth 50 CHF), practise this with
 feedback, and then bid for the numbers in an auction. You do this twice, each time with a different relationship between number
 and value, so it is two sessions:
 
@@ -108,7 +108,7 @@ At the end of each run you see what you earned in that run and in total so far.
 
 ### Good to know
 
-- **Only values from 6 to 50 are accepted.** If you press ENTER on anything else, nothing happens: correct it and press ENTER again.
+- **Only values from 1 to 50 are accepted.** If you press ENTER on anything else, nothing happens: correct it and press ENTER again.
 - **"Too late!"** means you did not press ENTER in time. Your typed answer is not counted, and in the auction that trial pays nothing.
 - **You do not have to type two decimals.** `23` or `23.5` is also accepted; use the precision you actually believe in.
 - **Your mouse is not used.** If the mouse pointer or other windows are in the way in `default` mode, click once on the experiment window to make sure it has the keyboard focus.

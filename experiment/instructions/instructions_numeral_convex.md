@@ -8,9 +8,9 @@ Please carefully read the material on the following pages to understand:
 
 - The rules of how you will be paid out.
 
-Your task today will be to learn the relation between a number and its monetary value. Each number between 0 and 100 has
+Your task today will be to learn the relation between a number and its monetary value. Each number between 1 and 50 has
 a specific monetary value assigned to it (like a bank note). The numbers are shown with two decimals, for example
-36.36. To learn the relation, you will first be shown 23 numbers spread evenly between 0 and 100, together with
+18.18. To learn the relation, you will first be shown 23 numbers spread evenly between 1 and 50, together with
 their corresponding monetary value (Phase 1). After that you will be shown a random number and you need to input the
 monetary amount that matches its value. You will get feedback on this (Phase 2). Finally, you will again be shown a
 number and can bid money to purchase it. Later, you can sell it for its actual monetary value that you learned in the
@@ -38,10 +38,10 @@ the SPACE BAR to continue.
 
 ![](numeral_examples_convex.png){width=3in}
 
-*Figure 1: Example of one number (36.36) together with its corresponding correct value (11.06 CHF).*
+*Figure 1: Example of one number (18.18) together with its corresponding correct value (6.32 CHF).*
 
-The values of the numbers range between 6 and 50 CHF. The value is a function of the number. The exact function is
-shown in Figure 2. As you can see, the relationship between the number and its value is not linear: the value rises only slowly for small numbers and then increases steeply for large numbers. For example, going from 0 to 25 increases the value by only 2.90 CHF (from 6.00 to 8.90 CHF), whereas going from 60 to 85 increases the value by 15.49 CHF (from 18.48 to 33.97 CHF). So, this is what you are supposed to learn.
+The values of the numbers range between 1 and 50 CHF. The value is a function of the number. The exact function is
+shown in Figure 2. As you can see, the relationship between the number and its value is not linear: the value rises only slowly for small numbers and then increases steeply for large numbers. For example, going from 1 to 13 increases the value by only 3.14 CHF (from 1.00 to 4.14 CHF), whereas going from 30 to 42 increases the value by 16.39 CHF (from 14.51 to 30.90 CHF). So, this is what you are supposed to learn.
 
 ![](mapping_numeral_convex.png){width=4.2in}
 
@@ -57,17 +57,17 @@ The number will be shown in the center of your screen for 1 second, after which 
 
 ![](numeral_training_convex.png){width=3in}
 
-*Figure 3: Example of one training trial with negative feedback, where the actual value is 11.06 and the input was
+*Figure 3: Example of one training trial with negative feedback, where the actual value is 6.32 and the input was
 3.50.*
 
 For each round, your task is to input a monetary value so that it matches the value of the number that you learned in
 phase 1. Type the value you believe corresponds to the number (up to two decimals, for example 23.45) and **press ENTER to
-confirm**. Only values between 6 and 50 are accepted. If your input is within 0.50 CHF of the monetary value of the
+confirm**. Only values between 1 and 50 are accepted. If your input is within 0.50 CHF of the monetary value of the
 number, you will be shown green feedback. If it is further away, you will be shown red feedback. Above the number, you
 will be given its actual value. For every number, you should ask yourself: **What is the monetary value of this number?
 That is, how much money would I get if I sold this number?** You have 5 seconds to make a guess. In total, you will
 complete 138 rounds in this phase of the experiment (6 blocks). The numbers are drawn at random, evenly spread between
-0 and 100, so most numbers you see will be new.
+1 and 50, so most numbers you see will be new.
 
 Try to predict the monetary value of the numbers in this phase as accurately as possible. **Your payment will depend on
 how well you have learned this relationship.** You will earn more if you are able to guess the associated value of the
@@ -107,7 +107,7 @@ willing to pay to get THAT number and then bid the amount closest to
 that value.
 
 What is the rule? At the end of each trial, the computer will choose a
-random price for the number which will range between 6 and 50 (the
+random price for the number which will range between 1 and 50 (the
 range of possible values of the numbers). If your bid is greater than
 the random price, you will get the number for the random price. You
 can then sell it in the end for its true value and earn the difference
@@ -129,7 +129,7 @@ earn any additional payout).
 
 For example, suppose that the number is worth 20 CHF to you. If you
 bid your true value, you will get the number if the random value is
-anything between 6 and 20 CHF. You will not get the number if the
+anything between 1 and 20 CHF. You will not get the number if the
 random value is 20 CHF or above. It follows that by bidding your true
 value you make a "profit" since you always end up paying less than the
 number is worth to you.
@@ -139,7 +139,7 @@ more than your true value and you win the bid for a price higher than
 the true value, your payout will be negative.)
 
 What happens if you bid less than you true value? For example, suppose
-that you bid 6 CHF even though your true value is 20 CHF. In this case
+that you bid 1 CHF even though your true value is 20 CHF. In this case
 you never get the number, which is not a good strategy since, when
 you bid your true value, you pretty much always end up paying less than
 the number is worth to you!

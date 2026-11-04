@@ -16,7 +16,10 @@ sys.path.insert(0, str(HERE.parent))
 from common import get_numeral_value, load_settings
 
 S = load_settings()
-EXAMPLE, WRONG = 36.36, 3.5
+EXAMPLE, WRONG = 18.18, 3.5
+N = S['numeral']
+LO, HI = N['range']
+SCALING = int(S['main_task']['reward_scaling'])
 FIGSIZE = (4.8, 3.2)
 
 
@@ -48,12 +51,12 @@ def figures(mapping):
            bottom='Left/right arrow: change number.')
     screen(HERE / f'numeral_training_{mapping}.png', f'{EXAMPLE:.2f}', f'{v:.2f}', '#ff0000', f'{WRONG:.2f}')
     screen(HERE / f'numeral_auction_{mapping}.png', box=f'{v - 1.24:.2f}', box_y=0,
-           bottom='Type a value (6-50) and press ENTER')
-    x = np.linspace(0, 100, 501)
+           bottom=f'Type a value ({LO}-{HI}) and press ENTER')
+    x = np.linspace(LO, HI, 501)
     fig, ax = plt.subplots(figsize=(5, 3.6))
     ax.plot(x, [value(i, mapping) for i in x], color='#1f77b4')
-    ax.set(xlabel='Number', ylabel='Value (CHF)', xlim=(-2, 102), ylim=(4, 52), xticks=range(0, 101, 20),
-           yticks=range(10, 51, 10), title=f'{mapping.capitalize()} mapping')
+    ax.set(xlabel='Number', ylabel='Value (CHF)', xlim=(-1, 52), ylim=(-1, 52), xticks=[1, 10, 20, 30, 40, 50],
+           yticks=[1, 10, 20, 30, 40, 50], title=f'{mapping.capitalize()} mapping')
     ax.spines[['top', 'right']].set_visible(False)
     fig.tight_layout()
     fig.savefig(HERE / f'mapping_numeral_{mapping}.png', dpi=200)
@@ -61,13 +64,13 @@ def figures(mapping):
 
 
 def shape_text(mapping):
-    a0, a1, b0, b1 = (value(x, mapping) for x in (0, 25, 60, 85))
+    a0, a1, b0, b1 = (value(x, mapping) for x in (1, 13, 30, 42))
     rise, more = ('rises steeply for small numbers and then flattens out for large numbers', 'only ') if mapping == 'concave' \
         else ('rises only slowly for small numbers and then increases steeply for large numbers', '')
     first = '' if mapping == 'concave' else 'only '
     return (f'As you can see, the relationship between the number and its value is not linear: the value {rise}. For '
-            f'example, going from 0 to 25 increases the value by {first}{a1 - a0:.2f} CHF (from {a0:.2f} to {a1:.2f} CHF), '
-            f'whereas going from 60 to 85 increases the value by {more}{b1 - b0:.2f} CHF (from {b0:.2f} to {b1:.2f} CHF). '
+            f'example, going from 1 to 13 increases the value by {first}{a1 - a0:.2f} CHF (from {a0:.2f} to {a1:.2f} CHF), '
+            f'whereas going from 30 to 42 increases the value by {more}{b1 - b0:.2f} CHF (from {b0:.2f} to {b1:.2f} CHF). '
             'So, this is what you are supposed to learn.')
 
 
@@ -83,10 +86,12 @@ def auction_explanation():
 
 def booklet(mapping):
     v = value(EXAMPLE, mapping)
-    grid = np.linspace(0, 100, 10001)
+    grid = np.linspace(LO, HI, 10001)
     values = np.array([value(x, mapping) for x in grid])
-    lo, hi = S['slider']['range']
-    payout = round(hi + np.mean((values - lo) ** 2) / (2 * (hi - lo)))  # budget + expected BDM profit for true bids
+    lo, hi = LO, HI
+    n_trials = S['main_task']['n_runs'] * S['main_task']['n_repeats'] * N['n_bins']
+    # budget + expected BDM profit for true bids, per trial, x trials x payout fraction
+    payout = round((hi + np.mean((values - lo) ** 2) / (2 * (hi - lo))) * n_trials / SCALING)
     return f"""# Instructions (numbers, mapping {mapping.upper()})
 
 Welcome to this study! And thank you for participating.
@@ -97,9 +102,9 @@ Please carefully read the material on the following pages to understand:
 
 - The rules of how you will be paid out.
 
-Your task today will be to learn the relation between a number and its monetary value. Each number between 0 and 100 has
+Your task today will be to learn the relation between a number and its monetary value. Each number between {lo} and {hi} has
 a specific monetary value assigned to it (like a bank note). The numbers are shown with two decimals, for example
-{EXAMPLE:.2f}. To learn the relation, you will first be shown 23 numbers spread evenly between 0 and 100, together with
+{EXAMPLE:.2f}. To learn the relation, you will first be shown 23 numbers spread evenly between {lo} and {hi}, together with
 their corresponding monetary value (Phase 1). After that you will be shown a random number and you need to input the
 monetary amount that matches its value. You will get feedback on this (Phase 2). Finally, you will again be shown a
 number and can bid money to purchase it. Later, you can sell it for its actual monetary value that you learned in the
@@ -151,12 +156,12 @@ The number will be shown in the center of your screen for 1 second, after which 
 
 For each round, your task is to input a monetary value so that it matches the value of the number that you learned in
 phase 1. Type the value you believe corresponds to the number (up to two decimals, for example 23.45) and **press ENTER to
-confirm**. Only values between {lo} and {hi} are accepted. If your input is within 0.50 CHF of the monetary value of the
+confirm**. Only values between {lo} and {hi} are accepted. If your input is within {N['feedback_tolerance']:.2f} CHF of the monetary value of the
 number, you will be shown green feedback. If it is further away, you will be shown red feedback. Above the number, you
 will be given its actual value. For every number, you should ask yourself: **What is the monetary value of this number?
 That is, how much money would I get if I sold this number?** You have 5 seconds to make a guess. In total, you will
 complete 138 rounds in this phase of the experiment (6 blocks). The numbers are drawn at random, evenly spread between
-0 and 100, so most numbers you see will be new.
+{lo} and {hi}, so most numbers you see will be new.
 
 Try to predict the monetary value of the numbers in this phase as accurately as possible. **Your payment will depend on
 how well you have learned this relationship.** You will earn more if you are able to guess the associated value of the
@@ -173,7 +178,7 @@ have a very limited amount of time to input a value (4 seconds). The value of th
 the first two phases of the experiment.
 
 Your budget for each trial is {hi} CHF. You will keep the rest of the budget after paying the price of the number if you
-win the bidding. The numbers you bought will be exchanged for money at the end of the experiment, and you will get 1/184
+win the bidding. The numbers you bought will be exchanged for money at the end of the experiment, and you will get 1/{SCALING}
 of the money you win here as extra payment. As you will see in a moment, your best strategy is to bid your true value for
 the number.
 
