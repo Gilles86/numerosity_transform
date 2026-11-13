@@ -175,8 +175,9 @@ Please read the following pages carefully. They explain the task and how you wil
 
 ## Overview
 
-The study consists of **{n_ses} sessions of about one hour each**, on separate days. Every session follows the same
-three phases:
+The study consists of **{n_ses} sessions of about one hour each**, on separate days. **In every session you learn a new
+relationship between {'numbers' if numeral else 'dot clouds'} and money**, so you will get a new booklet each time. Every
+session follows the same three phases:
 
 1. **Learn** (Phase 1): you look at {examples} together with their monetary values, at your own pace.
 2. **Practice with feedback** (Phase 2): you see a {thing}, type its value, and are shown the correct value.
@@ -215,7 +216,7 @@ The values range from {LO} to {HI} CHF. Figure 2 shows exactly how the value dep
 
 ![]({fig['mapping']}){{width=4in}}
 
-*Figure 2: The value of each {thing} ({mapping.upper()} mapping). This is the same in all {n_ses} sessions.*
+*Figure 2: The value of each {thing} ({mapping.upper()} mapping). Each session has a different relationship; this booklet is for today's.*
 
 ## Phase 2: practice with feedback
 
