@@ -178,12 +178,13 @@ def main():
 
     from psychopy import gui
     start = first_missing_phase(subject, session, stimulus, mapping)
-    info = {'Start at phase': [start] + [p for p in PHASES if p != start]}
-    dlg = gui.DlgFromDict(info, title=f'Participant {subject}, session {session}',
-                          tip={'Start at phase': 'Only change this after a crash'}, alwaysOnTop=True)
-    if not dlg.OK:
-        sys.exit()
-    start = info['Start at phase']
+    if start != PHASES[0]:  # only after a crash: let the experimenter confirm where to continue
+        info = {'Continue at phase': [start] + [p for p in PHASES if p != start]}
+        dlg = gui.DlgFromDict(info, title=f'EXPERIMENTER: participant {subject}, session {session} was interrupted',
+                              alwaysOnTop=True)
+        if not dlg.OK:
+            sys.exit()
+        start = info['Continue at phase']
 
     env = dict(os.environ, NUMEROSITY_LOG_ROOT=str(local_root()))
     cmds = commands(subject, session, stimulus, mapping)
