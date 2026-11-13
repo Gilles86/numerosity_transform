@@ -89,18 +89,24 @@ Phase 3 has 4 runs of 46 rounds. After each run you see what you earned so far (
 
 ### How the auction works
 
-In every round you have a **budget of 50 CHF**. After you bid, the computer draws a **random price** between 1 and
-50 CHF (every price is equally likely; your bid does not influence it).
+Every round works the same way:
 
-- If your bid is **higher than the random price**, you buy the dot cloud at the random price. You then sell it for its
-  true value. Your result for that round is: 50 CHF − price + true value.
-- If your bid is **lower than or equal to the random price**, you do not buy anything. Your result for that round is the
-  50 CHF budget.
+1. You get a **budget of 50 CHF** for this round.
+2. You **bid**: the most you would pay for the dot cloud.
+3. The computer draws a **random price** between 1 and 50 CHF. Every price is equally likely, and your bid does
+   not influence it.
+4. If your bid is **higher than the price**, you buy the dot cloud: you pay the price and receive its true value.
+   Otherwise you buy nothing and keep the 50 CHF.
 
-**Your auction bonus for the session is one fifth of your average result per round** (that is, the total of all
-184 rounds divided by 920). If you bid the true value in every round, each round's result is
-between 50 and almost 100 CHF, so your bonus is between 10 and 20 CHF per session, on average about 11
-CHF. Missed rounds (no ENTER) and bids above the true value lower your bonus.
+| Example: the dot cloud is worth 30 CHF and you bid 30 | Your result for this round |
+|---|---|
+| The price is 12: you buy | 50 − 12 + 30 = **68 CHF** |
+| The price is 40: you do not buy | **50 CHF** |
+
+**Your bonus.** The round results are not paid out one by one. At the end of the session we take your **average
+result over all 184 rounds** and pay you **one fifth of it**: an average of 60 CHF, for example, gives a bonus of
+12 CHF. A round gives between 50 and almost 100 CHF, so the bonus is between 10 and 20 CHF; with good bids it is
+about 11 CHF. A round without a bid (no ENTER in time) counts as 0 CHF.
 
 ### Why you should always bid the true value
 
@@ -124,8 +130,8 @@ truly worth.** When you buy, you pay on average about half of the value.
 1. You bid on 184 dot clouds per session (4 runs of 46).
 2. Treat every bid as if it were the only one.
 3. Always bid the value you believe is correct, and press ENTER within 4 seconds.
-4. Your auction bonus is one fifth of your average result per round: between 10 and 20 CHF, on average about
-   11 CHF.
+4. Your bonus is one fifth of your average round result (an average of 60 CHF gives 12 CHF): between 10 and 20 CHF,
+   about 11 CHF with good bids.
 5. Together with the show-up fee of 15 CHF, you earn about 26 CHF per session, plus 20 CHF after
    the last session.
 

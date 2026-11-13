@@ -259,18 +259,24 @@ Phase 3 has {M['n_runs']} runs of {M['n_repeats'] * 23} rounds. After each run y
 
 ### How the auction works
 
-In every round you have a **budget of {HI} CHF**. After you bid, the computer draws a **random price** between {LO} and
-{HI} CHF (every price is equally likely; your bid does not influence it).
+Every round works the same way:
 
-- If your bid is **higher than the random price**, you buy the {thing} at the random price. You then sell it for its
-  true value. Your result for that round is: {HI} CHF − price + true value.
-- If your bid is **lower than or equal to the random price**, you do not buy anything. Your result for that round is the
-  {HI} CHF budget.
+1. You get a **budget of {HI} CHF** for this round.
+2. You **bid**: the most you would pay for the {thing}.
+3. The computer draws a **random price** between {LO} and {HI} CHF. Every price is equally likely, and your bid does
+   not influence it.
+4. If your bid is **higher than the price**, you buy the {thing}: you pay the price and receive its true value.
+   Otherwise you buy nothing and keep the {HI} CHF.
 
-**Your auction bonus for the session is one fifth of your average result per round** (that is, the total of all
-{N_TRIALS} rounds divided by {M['reward_scaling']:g}). If you bid the true value in every round, each round's result is
-between {HI} and almost {2 * HI} CHF, so your bonus is between 10 and 20 CHF per session, on average about {bonus:.0f}
-CHF. Missed rounds (no ENTER) and bids above the true value lower your bonus.
+| Example: the {thing} is worth 30 CHF and you bid 30 | Your result for this round |
+|---|---|
+| The price is 12: you buy | {HI} − 12 + 30 = **{HI - 12 + 30} CHF** |
+| The price is 40: you do not buy | **{HI} CHF** |
+
+**Your bonus.** The round results are not paid out one by one. At the end of the session we take your **average
+result over all {N_TRIALS} rounds** and pay you **one fifth of it**: an average of 60 CHF, for example, gives a bonus of
+12 CHF. A round gives between {HI} and almost {2 * HI} CHF, so the bonus is between 10 and 20 CHF; with good bids it is
+about {bonus:.0f} CHF. A round without a bid (no ENTER in time) counts as 0 CHF.
 
 ### Why you should always bid the true value
 
@@ -294,8 +300,8 @@ truly worth.** When you buy, you pay on average about half of the value.
 1. You bid on {N_TRIALS} {things} per session ({M['n_runs']} runs of {M['n_repeats'] * 23}).
 2. Treat every bid as if it were the only one.
 3. Always bid the value you believe is correct, and press ENTER within {D['response']:g} seconds.
-4. Your auction bonus is one fifth of your average result per round: between 10 and 20 CHF, on average about
-   {bonus:.0f} CHF.
+4. Your bonus is one fifth of your average round result (an average of 60 CHF gives 12 CHF): between 10 and 20 CHF,
+   about {bonus:.0f} CHF with good bids.
 5. Together with the show-up fee of {fee:g} CHF, you earn about {per_session:.0f} CHF per session, plus {cb:g} CHF after
    the last session.
 
