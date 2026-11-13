@@ -16,4 +16,5 @@ if (-not (Test-Path (Join-Path $experiment 'lab_python'))) { throw 'lab_python m
 Write-Host "Copying to $target ..."
 robocopy $experiment $target /MIR /XD logs logs_backup .venv __pycache__ /NFL /NDL /NP
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed (exit code $LASTEXITCODE)" }
-Write-Host "Done. In Lab Control: tick 'Mirror Experiment Files' when starting the clients."
+Write-Host "Done. Lab Control command: C:\ExpFiles\$env:USERNAME\numerosity_transform\experiment\lab.bat"
+Write-Host "Tick 'Mirror Experiment Files' when starting the clients."
