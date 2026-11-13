@@ -1,175 +1,131 @@
-# Instructions (numbers, mapping CONCAVE)
+# Instructions (numbers, CONCAVE mapping)
 
-Welcome to this study! And thank you for participating.
+Welcome to this study, and thank you for participating!
 
-Please carefully read the material on the following pages to understand:
+Please read the following pages carefully. They explain the task and how you will be paid.
 
-- The task you will complete today.
+## Overview
 
-- The rules of how you will be paid out.
+The study consists of **4 sessions of about one hour each**, on separate days. Every session follows the same
+three phases:
 
-Your task today will be to learn the relation between a number and its monetary value. Each number between 1 and 50 has
-a specific monetary value assigned to it (like a bank note). The numbers are shown with two decimals, for example
-18.18. To learn the relation, you will first be shown 23 numbers spread evenly between 1 and 50, together with
-their corresponding monetary value (Phase 1). After that you will be shown a random number and you need to input the
-monetary amount that matches its value. You will get feedback on this (Phase 2). Finally, you will again be shown a
-number and can bid money to purchase it. Later, you can sell it for its actual monetary value that you learned in the
-previous phase (Phase 3). Since your bid is the maximum price you will have to pay to buy the number (the price is
-randomly determined, up to your bid), you are best off to bid the real monetary value of the number. In this phase,
-there is no feedback. So, in the end, you will be paid according to how well you learned the relationship between the
-numbers and their values, and according to the difference between the random price set by the computer if you won the
-bid and the resell value of the numbers you purchased in phase 3.
+1. **Learn** (Phase 1): you look at 25 numbers, spread evenly between 1 and 50, together with their monetary values, at your own pace.
+2. **Practice with feedback** (Phase 2): you see a number, type its value, and are shown the correct value.
+3. **Auction** (Phase 3): you see a number and bid for it in an auction. There is no feedback. **This phase determines
+   your bonus.**
 
-**Note:** new numbers keep appearing, so you cannot memorize a list. Learn how the value changes with the number. Each
-number is shown for 1 second.
+Your task is to learn the relation between a number and its monetary value. Each number between 1 and 50 has a specific monetary value assigned to it (like a bank note). The numbers are shown with two decimals, for example 18.18. **Note:** new numbers keep appearing, so you cannot memorize a list. Learn how the value changes with the number.
 
-By agreeing to participate, you have already earned a show-up fee of **TODO(Gilles)** CHF. It is **very** important that
-you understand the following instructions, since the additional payoffs from participating in the experiment will depend
-on your ability to make good decisions. Thank you again for participating in this experiment!
+## Payment
 
-## Experiment Description
+| | |
+|---|---|
+| Show-up fee | **15 CHF per session** |
+| Auction bonus (Phase 3) | between 10 and 20 CHF per session, on average about **13 CHF** if you bid well |
+| Completion bonus | **20 CHF** after you have completed all 4 sessions |
+| **Total (typical)** | **about 131 CHF** for all 4 sessions |
 
-## [First phase of the experiment]{.underline}
+You are paid at the end of each session; the completion bonus is paid at the end of session 4. How the auction
+bonus is computed is explained under Phase 3. In short: the better you know the value of each number, and the more
+consistently you bid that value, the more you earn.
 
-**In the first phase of the experiment, you learn the monetary value of the numbers. You are shown 23 numbers together
-with their corresponding monetary values (see Figure 1).** You can look at the numbers and their values for as long as
-you want. Press the RIGHT ARROW to see the next number and the LEFT ARROW to go back. Once you have seen all 23, press
-the SPACE BAR to continue.
+Before you start, the experimenter will ask you a few questions to make sure you understand the task and the payment.
 
-![](numeral_examples_concave.png){width=3in}
+## Phase 1: learn the values
 
-*Figure 1: Example of one number (18.18) together with its corresponding correct value (33.58 CHF).*
+**You are shown 25 numbers, spread evenly between 1 and 50, together with their monetary values (Figure 1).** Press the RIGHT ARROW to see the next
+number and the LEFT ARROW to go back. Take as long as you like. Once you have seen all of them, press the SPACE BAR to
+continue.
 
-The values of the numbers range between 1 and 50 CHF. The value is a function of the number. The exact function is
-shown in Figure 2. As you can see, the relationship between the number and its value is not linear: the value rises steeply for small numbers and then flattens out for large numbers. For example, going from 1 to 13 increases the value by 25.84 CHF (from 1.00 to 26.84 CHF), whereas going from 30 to 42 increases the value by only 4.96 CHF (from 43.19 to 48.15 CHF). So, this is what you are supposed to learn.
+![](fig_numeral_concave_examples.png){width=3.5in}
 
-![](mapping_numeral_concave.png){width=4.2in}
+*Figure 1: Phase 1 screen, showing one number (18.18) together with its value (33.58 CHF). The text at the bottom counts how many you have seen.*
 
-*Figure 2: Mapping function from the number to its value (CONCAVE mapping).*
+The values range from 1 to 50 CHF. Figure 2 shows exactly how the value depends on the number. The relationship between the number and its value is not linear: the value rises steeply for small numbers and then flattens out for large numbers. For example, going from 1 to 13 increases the value by 25.84 CHF (from 1.00 to 26.84 CHF), whereas going from 30 to 42 increases the value by only 4.96 CHF (from 43.19 to 48.15 CHF). This is the relationship you need to learn.
 
-Pay close attention during this phase of the experiment already. You need to learn this exact relationship to earn the
-maximum money possible.
+![](fig_numeral_concave_mapping.png){width=4in}
 
-## [Second phase of the experiment]{.underline}
+*Figure 2: The value of each number (CONCAVE mapping). This is the same in all 4 sessions.*
 
-**In the second phase of the experiment, you will be shown a number and have to input its associated monetary value.**
-The number will be shown in the center of your screen for 1 second, after which a response box appears (see Figure 3).
+## Phase 2: practice with feedback
 
-![](numeral_training_concave.png){width=3in}
+**You see a number and type its value.** Each round runs as in Figure 3:
 
-*Figure 3: Example of one training trial with negative feedback, where the actual value is 33.58 and the input was
-3.50.*
+![](fig_numeral_concave_training.png){width=6.5in}
 
-For each round, your task is to input a monetary value so that it matches the value of the number that you learned in
-phase 1. Type the value you believe corresponds to the number (up to two decimals, for example 23.45) and **press ENTER to
-confirm**. Only values between 1 and 50 are accepted. If your input is within 0.50 CHF of the monetary value of the
-number, you will be shown green feedback. If it is further away, you will be shown red feedback. Above the number, you
-will be given its actual value. For every number, you should ask yourself: **What is the monetary value of this number?
-That is, how much money would I get if I sold this number?** You have 5 seconds to make a guess. In total, you will
-complete 138 rounds in this phase of the experiment (6 blocks). The numbers are drawn at random, evenly spread between
-1 and 50, so most numbers you see will be new.
+*Figure 3: One round of Phase 2.*
 
-Try to predict the monetary value of the numbers in this phase as accurately as possible. **Your payment will depend on
-how well you have learned this relationship.** You will earn more if you are able to guess the associated value of the
-number with the **least possible difference to the true value in each guess**.
+1. A green cross tells you that a new round starts; it turns white.
+2. The number appears in the centre and stays on the screen.
+3. After 1 second a box appears below it. Type the value (up to two decimals, for example 23.45) and **press ENTER**. You can correct
+   typing errors with BACKSPACE. Only values between 1 and 50 are accepted. You have 5 seconds.
+4. Your answer turns yellow and the correct value appears above the number. If your answer is within 0.50 CHF of the true value, the correct value is shown in green; if it is further away, it is shown in red. If you do not press ENTER in time,
+   you see "Too late!".
 
-**Note:** You will have the opportunity to take short breaks between blocks. Use this time to rest if needed, but
-remember that your performance -- and thus your earnings -- will depend on your focus and accuracy.
+For every number, ask yourself: **what is this number worth? How much money would I get if I sold it?**
 
-## [Third and final phase of the experiment]{.underline}
+There are 138 rounds in 6 blocks, with a short break between
+blocks. The numbers are drawn at random, evenly spread between 1 and 50, so most numbers you see will be new. Phase 2 itself is not paid, but it is your chance to learn the values precisely: **the better you learn
+them here, the more you will earn in Phase 3.**
 
-**In the third and final phase of the experiment, you have to input the monetary value of a presented number as a BID in
-an AUCTION (see Figure 4).** The difference to the previous phase is that you will not receive feedback and that you only
-have a very limited amount of time to input a value (4 seconds). The value of the number is exactly what you learnt in
-the first two phases of the experiment.
+## Phase 3: the auction
 
-Your budget for each trial is 50 CHF. You will keep the rest of the budget after paying the price of the number if you
-win the bidding. The numbers you bought will be exchanged for money at the end of the experiment, and you will get 1/184
-of the money you win here as extra payment. As you will see in a moment, your best strategy is to bid your true value for
-the number.
+**You see a number and bid for it.** Each round runs as in Figure 4:
 
-![](numeral_auction_concave.png){width=3in}
+![](fig_numeral_concave_auction.png){width=6.5in}
 
-*Figure 4: Example of the response screen of one phase 3 trial (final phase). The number has disappeared, and you input
-its value without feedback.*
+*Figure 4: One round of Phase 3.*
 
-You can submit your value by confirming your response (**press ENTER**). **If you do not confirm, your input will not be
-registered and you will not get any payout for this trial!** You only have a limited time of 4 seconds to input your
-value. To maximize your payment, you should always make a choice within the given timeframe.
+The differences from Phase 2 are: the number disappears before you answer, you have only **4 seconds**,
+and **there is no feedback**. Type your bid and **press ENTER**. **If you do not press ENTER in time, your bid is not
+registered and you earn nothing in that round** (not even the budget explained below).
 
-In every auction there is a rule that determines the price at which the
-items are sold. This auction is no different.
+Phase 3 has 4 runs of 46 rounds. After each run you see what you earned so far (Figure 5).
 
-The rule for our auction is a bit unusual, but its implications are
-straightforward: There is no way of gaming the auction, the BEST thing
-that you can do in every trial is to ask yourself how much you would be
-willing to pay to get THAT number and then bid the amount closest to
-that value.
+![](fig_numeral_concave_summary.png){width=3in}
 
-What is the rule? At the end of each trial, the computer will choose a
-random price for the number which will range between 1 and 50 (the
-range of possible values of the numbers). If your bid is greater than
-the random price, you will get the number for the random price. You
-can then sell it in the end for its true value and earn the difference
-between the true value and the random price you paid for it. If your bid
-is less or equal than the random value, you will NOT get the number
-but will not have to pay any money and won't earn any additional money
-from this trial.
+*Figure 5: The screen at the end of each run (example amounts).*
 
-Why is it in your interest to bid the value closest to your true value
-for the number?
+### How the auction works
 
-You might think that your best strategy is to bid less than the number is worth to you. This is INCORRECT. The payout you get is
-determined by the random price that the computer draws (your earnings
-are the difference between the true value of the number and the
-random price you paid) and NOT by your bid. Thus, if you lower your bid
-you would not be able to affect the payout, but might end up losing the
-opportunity to get the number at a "good" price (and therefore not
-earn any additional payout).
+In every round you have a **budget of 50 CHF**. After you bid, the computer draws a **random price** between 1 and
+50 CHF (every price is equally likely; your bid does not influence it).
 
-For example, suppose that the number is worth 20 CHF to you. If you
-bid your true value, you will get the number if the random value is
-anything between 1 and 20 CHF. You will not get the number if the
-random value is 20 CHF or above. It follows that by bidding your true
-value you make a "profit" since you always end up paying less than the
-number is worth to you.
+- If your bid is **higher than the random price**, you buy the number at the random price. You then sell it for its
+  true value. Your result for that round is: 50 CHF − price + true value.
+- If your bid is **lower than or equal to the random price**, you do not buy anything. Your result for that round is the
+  50 CHF budget.
 
-Clearly, you should never bid more than your true value. (If you bid
-more than your true value and you win the bid for a price higher than
-the true value, your payout will be negative.)
+**Your auction bonus for the session is one fifth of your average result per round** (that is, the total of all
+184 rounds divided by 920). If you bid the true value in every round, each round's result is
+between 50 and almost 100 CHF, so your bonus is between 10 and 20 CHF per session, on average about 13
+CHF. Missed rounds (no ENTER) and bids above the true value lower your bonus.
 
-What happens if you bid less than you true value? For example, suppose
-that you bid 1 CHF even though your true value is 20 CHF. In this case
-you never get the number, which is not a good strategy since, when
-you bid your true value, you pretty much always end up paying less than
-the number is worth to you!
+### Why you should always bid the true value
 
-Note another attractive property of the auction rules: conditional on
-getting the number (i.e, conditional on the random number being less
-or equal to your bid), the price that you pay is on average half of your
-bid.
+You might think it is better to bid less than the number is worth. **This is incorrect.** The price you pay is the
+random price, not your bid. Your bid only decides *whether* you buy.
 
-Thus, if you follow your best strategy and always bid the true value, on
-a typical trial you will get to buy the number at approximately half
-its true value (and thus earn half its value as the corresponding
-payout)!
+For example, suppose the number is worth 20 CHF:
 
-Don't let the details of the experiment confuse you, phase 3 trials are
-actually very simple:
+- If you **bid 20**, you buy whenever the random price is below 20, so you always pay less than it is worth and make a
+  profit.
+- If you **bid less, say 5**, you still pay the same random price when you buy, but you miss all the chances to buy it
+  at a price between 5 and 20. You lose profit.
+- If you **bid more, say 35**, you also buy when the random price is between 20 and 35. Then you pay more than the
+  number is worth and lose money.
 
-1.  You will make bids for purchasing a number on 184 trials (4 runs of 46 trials).
+So there is no way to game the auction. **The best you can do in every round is to bid what you believe the number is
+truly worth.** When you buy, you pay on average about half of the value.
 
-2.  You should treat each decision as if it were the only one.
+### In short
 
-3.  Your best strategy is to always bid the amount closest to your true
-    value for getting that number at the end of the experiment.
+1. You bid on 184 numbers per session (4 runs of 46).
+2. Treat every bid as if it were the only one.
+3. Always bid the value you believe is correct, and press ENTER within 4 seconds.
+4. Your auction bonus is one fifth of your average result per round: between 10 and 20 CHF, on average about
+   13 CHF.
+5. Together with the show-up fee of 15 CHF, you earn about 28 CHF per session, plus 20 CHF after
+   the last session.
 
-4.  If you follow the best strategy, on average the price that you pay
-    for a number will be half of the value you bid.
-
-5.  In the end, you will get 1/184 of the total money you accumulated
-    during the trials you participated in during this phase as real
-    money. (Remember: If you do not submit a bid during a trial, this
-    trial does not count as a trial that you participated in!)
-
-6.  Your average payout in the task will be around 64 CHF (on top of the show-up fee).
+Thank you again for participating!

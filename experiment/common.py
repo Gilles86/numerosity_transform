@@ -1,7 +1,6 @@
 import numpy as np
 import tempfile
 import yaml
-from functools import cache
 from pathlib import Path
 from exptools2.core import Session, Trial
 from exptools2.core.session import _merge_settings
@@ -10,11 +9,6 @@ from psychopy.visual import Circle, Line, Rect, TextStim
 
 HERE = Path(__file__).parent
 GREEN, RED, WHITE, YELLOW = (-1, 1, -1), (1, -1, -1), (1, 1, 1), (1, 1, -1)
-
-
-@cache
-def get_mappings():
-    return yaml.safe_load((HERE / 'settings' / 'default.yml').read_text())['mappings']
 
 
 def get_log_root(stimulus):
@@ -30,20 +24,25 @@ def load_settings(name='default'):
     return settings
 
 
-def get_value(numerosity, mapping):
-    m = get_mappings()
-    return m[mapping][m['numerosities'].index(numerosity)]
+def mapping_curve(x, mapping, k):
+    """[0, 1] -> [0, 1]. Linear; concave (1 - exp(-kx)) / (1 - exp(-k)); convex is concave mirrored in both axes."""
+    concave = lambda x: (1 - np.exp(-k * x)) / (1 - np.exp(-k))
+    return {'linear': x, 'concave': concave(x), 'convex': 1 - concave(1 - x)}[mapping]
+
+
+def get_value(numerosity, mapping, settings):
+    """Value of a number of dots, rounded to numerosity.value_precision (0.5 CHF). 1 dot is worth 1 CHF, 50 dots 50 CHF."""
+    n = settings['numerosity']
+    (lo, hi), step = n['range'], n['value_precision']
+    v = lo + (hi - lo) * mapping_curve((numerosity - lo) / (hi - lo), mapping, settings['numeral']['curvature'])
+    return float(round(v / step) * step)
 
 
 def get_numeral_value(number, mapping, settings):
-    """Value of a numeral: the exponential that the 0.5-CHF numerosity tables are rounded from,
-    as a continuous function of number. Both ends are fixed: range[0] is worth range[0] CHF and range[1] is worth range[1] CHF.
-    Convex is concave mirrored in both axes."""
+    """Value of a numeral: the same curve as the numerosities, unrounded apart from numeral.decimals."""
     n = settings['numeral']
-    (lo, hi), k = n['range'], n['curvature']
-    x = (number - lo) / (hi - lo)
-    concave = lambda x: (1 - np.exp(-k * x)) / (1 - np.exp(-k))
-    return round(float(lo + (hi - lo) * {'concave': concave(x), 'convex': 1 - concave(1 - x)}[mapping]), n['decimals'])
+    lo, hi = n['range']
+    return round(float(lo + (hi - lo) * mapping_curve((number - lo) / (hi - lo), mapping, n['curvature'])), n['decimals'])
 
 
 def sample_dot_positions(n, aperture_radius, dot_radius, min_ecc=0., max_tries=10000):
@@ -219,21 +218,23 @@ class BaseSession(Session):
 
     @property
     def levels(self):
-        """The stimuli that can be browsed in the examples phase: 23 numerosities, or 23 evenly spaced numerals."""
-        if self.is_numeral:
-            n = self.settings['numeral']
-            return np.linspace(*n['range'], n['n_bins']).round(n['decimals']).tolist()
-        return self.settings['mappings']['numerosities']
+        """The stimuli that can be browsed in the examples phase: n_examples evenly spaced numbers of dots or numerals."""
+        n = self.settings['numeral' if self.is_numeral else 'numerosity']
+        levels = np.linspace(*n['range'], n['n_examples'])
+        return levels.round(n['decimals']).tolist() if self.is_numeral else sorted({int(x) for x in np.floor(levels + .5)})
 
     def sample_stimuli(self, n_repeats):
-        """Shuffled stimuli for n_repeats passes over the range. Numerals: one new random number per bin, per pass, so
-        the range is covered evenly (and trial counts match the dots version) but no number has to come back."""
+        """Shuffled stimuli for n_repeats passes over the range. Each pass draws one new stimulus per bin, so the range is
+        covered evenly but no stimulus has to come back: numerals uniformly within 23 equal bins (two decimals), numbers
+        of dots from 23 near-equal groups of the whole numbers 1-50."""
         if self.is_numeral:
             n = self.settings['numeral']
             edges = np.linspace(*n['range'], n['n_bins'] + 1)
             stimuli = np.random.uniform(np.tile(edges[:-1], n_repeats), np.tile(edges[1:], n_repeats)).round(n['decimals'])
         else:
-            stimuli = np.tile(self.settings['mappings']['numerosities'], n_repeats)
+            n = self.settings['numerosity']
+            groups = np.array_split(np.arange(n['range'][0], n['range'][1] + 1), n['n_bins'])
+            stimuli = np.array([np.random.choice(g) for _ in range(n_repeats) for g in groups])
         np.random.shuffle(stimuli)
         return stimuli
 
@@ -245,7 +246,7 @@ class BaseSession(Session):
 
     def get_value(self, x):
         s = self.settings
-        return get_numeral_value(x, s['mapping'], s) if self.is_numeral else get_value(x, s['mapping'])
+        return get_numeral_value(x, s['mapping'], s) if self.is_numeral else get_value(x, s['mapping'], s)
 
     def run(self):
         self.start_experiment()
