@@ -14,7 +14,7 @@ if ($LASTEXITCODE -ne 0) { throw 'git pull failed (local changes? run "git statu
 if (-not (Test-Path (Join-Path $experiment 'lab_python'))) { throw 'lab_python missing: run lab\setup_lab_env.ps1 first' }
 
 Write-Host "Copying to $target ..."
-robocopy $experiment $target /MIR /XD logs logs_backup .venv __pycache__ /NFL /NDL /NP
+robocopy $experiment $target /MIR /MT:16 /XD logs logs_backup .venv __pycache__ /NFL /NDL /NP
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed (exit code $LASTEXITCODE)" }
 Write-Host "Done. Lab Control command: C:\ExpFiles\$env:USERNAME\numerosity_transform\experiment\lab.bat"
 Write-Host "Tick 'Mirror Experiment Files' when starting the clients."
