@@ -19,6 +19,9 @@ Settings: set *Mirror from* to your shortname. Then create two Custom Command ex
 - **numerosity A** (group on PCs 1–30): `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.bat --auto`
 - **numerosity B** (group on PCs 1–5): `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.bat --auto --offset 30`
 
+- **numerosity TEST**: `...\lab.bat --auto --test` — same, but everything goes to `*_test` folders, so tests never
+  count as real sessions.
+
 With `--auto`, nothing is clicked on the participant PCs. Participant = PC number (+ offset), so **every participant
 sits at the same PC in every session**. The session and, after a crash, the phase are taken from the logs. Stimulus
 and mapping come from `lab\participants.tsv`. Without `--auto`, a dialog asks for the participant number.

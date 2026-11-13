@@ -211,7 +211,13 @@ def main():
                    help='No dialogs: participant = computer number + offset, session and phase from the logs')
     p.add_argument('--offset', type=int, default=int(CONFIG.get('subject_offset', 0)),
                    help='Added to the computer number (e.g. 30 for a second group on computers 1-5)')
+    p.add_argument('--test', action='store_true',
+                   help='Write everything to *_test folders, so tests never count as real sessions')
     a = p.parse_args()
+    if a.test:
+        CONFIG['local_log_dir'] = CONFIG['local_log_dir'].rstrip('/\\') + '_test'
+        if CONFIG.get('results_dir'):
+            CONFIG['results_dir'] = CONFIG['results_dir'].rstrip('/\\') + '_test'
     if a.offset:
         CONFIG.update(subject_from_computer=True, subject_offset=a.offset)
 
@@ -219,7 +225,7 @@ def main():
     auto = automatic(plan, a.offset) if a.auto else None
     subject, session = auto or ask_participant(plan)
     stimulus, mapping = plan[(subject, session)]
-    print(f'{COMPUTER}: participant {subject}, session {session}, {stimulus} {mapping}')
+    print(f'{COMPUTER}: participant {subject}, session {session}, {stimulus} {mapping}' + (' [TEST]' if a.test else ''))
 
     from psychopy import gui
     start = first_missing_phase(subject, session, stimulus, mapping)
