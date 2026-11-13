@@ -10,3 +10,10 @@ results_dir: 'N:\client_write\gdehol\numerosity_transform'
 # Local log folder on each client. Must be OUTSIDE C:\ExpFiles, because Lab Control's mirroring deletes everything
 # there that is not on the network share.
 local_log_dir: '~/numerosity_transform_logs'
+
+# Participant number from the computer number: participant = computer number + subject_offset, filled in (and still
+# editable) in the first dialog. Use when every participant keeps the same seat in all sessions, e.g. group A on
+# computers 1-30 (offset 0 -> participants 1-30) and group B on computers 1-5 (offset 30 -> participants 31-35).
+# false: the participant number is typed in from the seating card.
+subject_from_computer: false
+subject_offset: 0

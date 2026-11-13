@@ -14,6 +14,7 @@ Where things go is set in lab/lab_config.yml. Test outside the lab with:  uv run
 import csv
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -129,10 +130,24 @@ def message(title, text):
     dlg.show()
 
 
+def computer_number():
+    """Trailing number of the computer name (e.g. 23 for a client called ...23), or None."""
+    m = re.search(r'(\d+)\D*$', COMPUTER)
+    return int(m.group(1)) if m else None
+
+
+def suggested_participant():
+    """If participants keep the same seat in every session: participant = computer number + subject_offset."""
+    nr = computer_number()
+    if CONFIG.get('subject_from_computer') and nr is not None:
+        return str(nr + int(CONFIG.get('subject_offset', 0)))
+    return ''
+
+
 def ask_participant(plan):
     from psychopy import gui
     while True:
-        info = {'Participant number': ''}
+        info = {'Participant number': suggested_participant()}
         dlg = gui.DlgFromDict(info, title=f'Numerosity study - {COMPUTER}', alwaysOnTop=True)
         if not dlg.OK:
             sys.exit()
