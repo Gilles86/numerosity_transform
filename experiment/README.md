@@ -28,6 +28,11 @@ uses the mouse slider instead. The subject can be a name (`gilles`): logs go to 
 Press `q` to quit. Logs go to `logs/sub-XX/ses-Y/` (exptools2 `*_events.tsv` with numerosity, value, mapping,
 response, response_time, price (random BDM price), reward; plus `reward_<sub>_<ses>_<run>.<mapping>.txt` per auction run).
 
+## In the lab
+
+`lab.py` runs everything on a lab client without a terminal: a dialog for the participant number, then all phases. Setup, Lab Control
+and payment list: [`lab/README.md`](lab/README.md).
+
 ## Arabic-numeral version
 
 `--stimulus numeral` (or `numeral` in `start.py`; concave and convex only) replaces the dot cloud by a number from 1.00 to

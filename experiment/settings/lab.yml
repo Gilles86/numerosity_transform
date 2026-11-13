@@ -1,9 +1,11 @@
-# Overrides default.yml for the lab PC; adjust screen/monitor to the actual setup.
+# BLU lab client PCs: Acer Nitro VG252Q, 24.5", 1920x1080 (visible area ~54.4 x 30.6 cm), 85 Hz. Overrides default.yml.
+# TODO: measure the viewing distance in the lab and set monitor.distance.
 window:
   size: [1920, 1080]
   fullscr: True
-  screen: 1
+  screen: 0
 
 monitor:
-  width: 54.5
-  distance: 100
+  name: blu_lab
+  width: 54.4   # cm
+  distance: 60  # cm; TODO measure

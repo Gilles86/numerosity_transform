@@ -1,0 +1,12 @@
+# Settings for lab.py (the lab launcher). Edit before the first lab session.
+
+# Screen settings file in settings/ (lab.yml = BLU lab client screens)
+settings: lab
+
+# Network folder the clients can write to; results are copied here after every phase and read back to find out
+# which session a participant is in. TODO: check the shortname (your UZH shortname) and that the folder exists.
+results_dir: 'N:\client_write\gdehol\numerosity_transform'
+
+# Local log folder on each client. Must be OUTSIDE C:\ExpFiles, because Lab Control's mirroring deletes everything
+# there that is not on the network share.
+local_log_dir: '~/numerosity_transform_logs'

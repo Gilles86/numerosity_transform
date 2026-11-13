@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import tempfile
 import yaml
@@ -12,8 +14,10 @@ GREEN, RED, WHITE, YELLOW = (-1, 1, -1), (1, -1, -1), (1, 1, 1), (1, 1, -1)
 
 
 def get_log_root(stimulus):
-    """Numerals log to their own tree, so the dot-cloud analyses (which glob logs/sub-*) never pick them up."""
-    return HERE / 'logs' / 'numerals' if stimulus == 'numeral' else HERE / 'logs'
+    """Numerals log to their own tree, so the dot-cloud analyses (which glob logs/sub-*) never pick them up.
+    The environment variable NUMEROSITY_LOG_ROOT replaces experiment/logs (lab.py uses it to log outside C:\\ExpFiles)."""
+    root = Path(os.environ.get('NUMEROSITY_LOG_ROOT') or HERE / 'logs')
+    return root / 'numerals' if stimulus == 'numeral' else root
 
 
 def load_settings(name='default'):
