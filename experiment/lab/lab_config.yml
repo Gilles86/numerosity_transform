@@ -17,3 +17,7 @@ local_log_dir: '~/numerosity_transform_logs'
 # false: the participant number is typed in from the seating card.
 subject_from_computer: false
 subject_offset: 0
+
+# Where collect.bat (on the ExpMaster) copies the results to: the project's data folder on the department share.
+# Copies only add or update files there, never delete.
+archive_dir: 'Z:\Department\projects\2026\dehollander_bedi_ruff_abstract_values\data\ds-numtransform'
