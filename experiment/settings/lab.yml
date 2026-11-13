@@ -1,11 +1,13 @@
-# BLU lab client PCs: Acer Nitro VG252Q, 24.5", 1920x1080 (visible area ~54.4 x 30.6 cm), 85 Hz. Overrides default.yml.
-# TODO: measure the viewing distance in the lab and set monitor.distance.
+# BLU lab client PCs: Dell P2425D (23.8", 2560x1440 QHD, active area 52.70 x 29.65 cm, up to 100 Hz; photo of the label
+# 2026-11-13, manufactured Jul 2025). Overrides default.yml.
+# window.size must equal the resolution Windows reports: [2560, 1440] at 100% scaling; at 125% use [2048, 1152].
+# TODO: check Display settings (resolution + scale) on a client, and measure the viewing distance.
 window:
-  size: [1920, 1080]
+  size: [2560, 1440]
   fullscr: True
   screen: 0
 
 monitor:
-  name: blu_lab
-  width: 54.4   # cm
+  name: blu_lab_p2425d
+  width: 52.7   # cm
   distance: 60  # cm; TODO measure
