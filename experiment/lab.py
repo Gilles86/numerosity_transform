@@ -9,6 +9,12 @@
 4. At the end a dialog shows what the participant earned this session; the amount is also saved for the payment list
    (lab/payment_list.py).
 
+Fully automatic (no dialogs; every participant keeps the same seat in all sessions):
+    lab.bat --auto              participant = computer number (group on computers 1-30 -> participants 1-30)
+    lab.bat --auto --offset 30  participant = computer number + 30 (group on computers 1-5 -> participants 31-35)
+The session is the participant's first session without all auction runs, and an interrupted session continues at the
+first phase without a log. If the computer number does not give a known participant, the dialogs are shown instead.
+
 Where things go is set in lab/lab_config.yml. Test outside the lab with:  uv run python lab.py
 """
 import csv
@@ -186,14 +192,38 @@ def ask_yes(text):
     return dlg.OK
 
 
+def automatic(plan, offset):
+    """No dialogs: participant = computer number + offset, session = first session not yet completed.
+    Returns None (and the dialogs are used instead) if that does not give a known participant and session."""
+    nr = computer_number()
+    if nr is None:
+        return None
+    subject = nr + offset
+    done = completed_sessions(subject)
+    session = max(done, default=0) + 1
+    return (subject, session) if (subject, session) in plan else None
+
+
 def main():
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument('--auto', action='store_true',
+                   help='No dialogs: participant = computer number + offset, session and phase from the logs')
+    p.add_argument('--offset', type=int, default=int(CONFIG.get('subject_offset', 0)),
+                   help='Added to the computer number (e.g. 30 for a second group on computers 1-5)')
+    a = p.parse_args()
+    if a.offset:
+        CONFIG.update(subject_from_computer=True, subject_offset=a.offset)
+
     plan = read_plan()
-    subject, session = ask_participant(plan)
+    auto = automatic(plan, a.offset) if a.auto else None
+    subject, session = auto or ask_participant(plan)
     stimulus, mapping = plan[(subject, session)]
+    print(f'{COMPUTER}: participant {subject}, session {session}, {stimulus} {mapping}')
 
     from psychopy import gui
     start = first_missing_phase(subject, session, stimulus, mapping)
-    if start != PHASES[0]:  # only after a crash: let the experimenter confirm where to continue
+    if start != PHASES[0] and not auto:  # only after a crash: let the experimenter confirm where to continue
         info = {'Continue at phase': [start] + [p for p in PHASES if p != start]}
         dlg = gui.DlgFromDict(info, title=f'EXPERIMENTER: participant {subject}, session {session} was interrupted',
                               alwaysOnTop=True)

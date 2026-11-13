@@ -15,18 +15,21 @@
 
 ## Lab Control (once)
 
-Settings → Create → Custom Experiment, type **Python**:
-- Executable: `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab_python\...\python.exe` (printed by the setup)
-- Script: `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.py`
+Settings: set *Mirror from* to your shortname. Then create two Custom Command experiments:
+- **numerosity A** (group on PCs 1–30): `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.bat --auto`
+- **numerosity B** (group on PCs 1–5): `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.bat --auto --offset 30`
+
+With `--auto`, nothing is clicked on the participant PCs. Participant = PC number (+ offset), so **every participant
+sits at the same PC in every session**. The session and, after a crash, the phase are taken from the logs. Stimulus
+and mapping come from `lab\participants.tsv`. Without `--auto`, a dialog asks for the participant number.
 
 ## Each session
 
-1. In Lab Control, select the clients, choose the experiment, tick **Mirror Experiment Files**, then click
+1. In Lab Control, select **only the occupied PCs**, choose A or B, tick **Mirror Experiment Files**, then click
    **Save and Start Clients**.
-2. Participants type their **participant number** (1–35, the same in every session). The session number is filled in.
-3. Everything else runs by itself. At the end, the screen shows the earnings and the participant raises their hand.
-4. Payment list: `<python.exe> lab\payment_list.py <session>` (or `--all` for the totals over all sessions).
-5. Copy `results_dir` to the project's `_behavioural_lab` folder.
+2. Everything runs by itself. At the end, the screen shows the earnings and the participant raises their hand.
+3. Payment list: `lab_python\...\python.exe lab\payment_list.py <session>` (or `--all`).
+4. Copy `N:\client_write\<shortname>\numerosity_transform` to the project's `_behavioural_lab` folder.
 
 **After a crash:** start `lab.py` again (on any PC) with the same number. It continues where it stopped.
 
