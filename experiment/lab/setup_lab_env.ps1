@@ -34,7 +34,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Import check failed' }
 
 $relative = $python.Substring($experiment.Length + 1)
 Write-Host ''
-Write-Host 'Done. In Lab Control, create a Custom Experiment of type "Python" with:'
+Write-Host 'Done. In LabControl, create a Custom Experiment of type "Python" with:'
 Write-Host "  Python executable:  C:\ExpFiles\<shortname>\numerosity_transform\experiment\$relative"
 Write-Host '  Script:             C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.py'
 Write-Host "Test here first:      & '$python' lab.py"

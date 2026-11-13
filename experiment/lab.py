@@ -1,10 +1,10 @@
-"""Lab launcher: one participant per computer, no terminal needed. Lab Control starts this script on every client.
+"""Lab launcher: one participant per computer, no terminal needed. LabControl starts this script on every client.
 
 1. A dialog asks for the participant number (from the seating card) and the session; the session is filled in from
    the results already on the network share. Stimulus and mapping come from lab/participants.tsv.
 2. All phases run in a row: examples, training, auction runs 1-4. After a crash, start again: the dialog proposes to
    continue with the first phase that has no log yet.
-3. Logs are written to a local folder outside C:\\ExpFiles (Lab Control's mirroring would delete them there) and copied
+3. Logs are written to a local folder outside C:\\ExpFiles (LabControl's mirroring would delete them there) and copied
    to the results folder on the network after every phase.
 4. At the end a dialog shows what the participant earned this session; the amount is also saved for the payment list
    (lab/payment_list.py).

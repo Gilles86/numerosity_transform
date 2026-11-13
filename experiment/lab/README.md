@@ -6,14 +6,14 @@
    `C:\Users\<shortname>\Documents\`.
 2. In PowerShell, in the `experiment` folder, run:
    `powershell -ExecutionPolicy ByPass -File lab\setup_lab_env.ps1`
-   This builds Python and PsychoPy in `lab_python\` and prints the paths for Lab Control.
+   This builds Python and PsychoPy in `lab_python\` and prints the paths for LabControl.
 3. Edit:
    - `lab\lab_config.yml`: `results_dir` = `N:\client_write\<shortname>\numerosity_transform`
    - `settings\lab.yml`: `monitor.distance` = the measured viewing distance in cm
 4. Test: `& <printed python.exe> lab.py` (participant `1`; `q` quits a phase).
 5. Copy the whole folder to `N:\expfiles\<shortname>\` (about 15 min the first time).
 
-## Lab Control (once)
+## LabControl (once)
 
 Settings: set *Mirror from* to your shortname. Then create two Custom Command experiments:
 - **numerosity A** (group on PCs 1–30): `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.bat --auto`
@@ -25,7 +25,7 @@ and mapping come from `lab\participants.tsv`. Without `--auto`, a dialog asks fo
 
 ## Each session
 
-1. In Lab Control, select **only the occupied PCs**, choose A or B, tick **Mirror Experiment Files**, then click
+1. In LabControl, select **only the occupied PCs**, choose A or B, tick **Mirror Experiment Files**, then click
    **Save and Start Clients**.
 2. Everything runs by itself. At the end, the screen shows the earnings and the participant raises their hand.
 3. Payment list: `lab_python\...\python.exe lab\payment_list.py <session>` (or `--all`).

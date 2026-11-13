@@ -1,4 +1,4 @@
-# Update the code from GitHub and copy the experiment to the lab share, from which Lab Control mirrors it to the clients.
+# Update the code from GitHub and copy the experiment to the lab share, from which LabControl mirrors it to the clients.
 # Run on the ExpMaster PC, in PowerShell, from the experiment folder of the git clone:
 #     powershell -ExecutionPolicy ByPass -File lab\deploy.ps1
 # The first copy includes lab_python and takes ~15 minutes; later copies only transfer changed files.
@@ -16,5 +16,5 @@ if (-not (Test-Path (Join-Path $experiment 'lab_python'))) { throw 'lab_python m
 Write-Host "Copying to $target ..."
 robocopy $experiment $target /MIR /MT:16 /XD logs logs_backup .venv __pycache__ /NFL /NDL /NP
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed (exit code $LASTEXITCODE)" }
-Write-Host "Done. Lab Control command: C:\ExpFiles\$env:USERNAME\numerosity_transform\experiment\lab.bat"
+Write-Host "Done. LabControl command: C:\ExpFiles\$env:USERNAME\numerosity_transform\experiment\lab.bat"
 Write-Host "Tick 'Mirror Experiment Files' when starting the clients."
