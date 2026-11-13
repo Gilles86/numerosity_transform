@@ -192,8 +192,9 @@ def ask_yes(text):
     return dlg.OK
 
 
-def automatic(plan, offset):
+def automatic(plan, offset, expected_session=None):
     """No dialogs: participant = computer number + offset, session = first session not yet completed.
+    With expected_session (from the LabControl command), the two must agree; otherwise the experimenter decides.
     Returns None (and the dialogs are used instead) if that does not give a known participant and session."""
     nr = computer_number()
     if nr is None:
@@ -201,7 +202,29 @@ def automatic(plan, offset):
     subject = nr + offset
     done = completed_sessions(subject)
     session = max(done, default=0) + 1
+    if expected_session and expected_session != session:
+        text = (f'EXPERIMENTER: {COMPUTER}, participant {subject}\n\n'
+                f'LabControl says session {expected_session}, but the logs say session {session} '
+                f'(completed: {", ".join(map(str, sorted(done))) or "none"}).\n\n'
+                f'OK = run session {expected_session} anyway.   Cancel = stop.')
+        if not ask_yes(text):
+            sys.exit(1)
+        session = expected_session
     return (subject, session) if (subject, session) in plan else None
+
+
+def write_status(subject, session, stimulus, mapping, phase):
+    """One line per computer in <results>/status/, so lab/status.py on the ExpMaster shows what every PC is doing."""
+    root = results_root()
+    if root is None:
+        return
+    try:
+        f = root / 'status' / f'{COMPUTER}.tsv'
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text('\t'.join(map(str, [COMPUTER, subject, session, stimulus, mapping, phase,
+                                          datetime.now().strftime('%H:%M:%S')])) + '\n')
+    except OSError:
+        pass
 
 
 def main():
@@ -213,6 +236,8 @@ def main():
                    help='Added to the computer number (e.g. 30 for a second group on computers 1-5)')
     p.add_argument('--test', action='store_true',
                    help='Write everything to *_test folders, so tests never count as real sessions')
+    p.add_argument('--session', type=int,
+                   help='Session the experimenter expects; checked against the logs before anything starts')
     a = p.parse_args()
     if a.test:
         CONFIG['local_log_dir'] = CONFIG['local_log_dir'].rstrip('/\\') + '_test'
@@ -222,7 +247,11 @@ def main():
         CONFIG.update(subject_from_computer=True, subject_offset=a.offset)
 
     plan = read_plan()
-    auto = automatic(plan, a.offset) if a.auto else None
+    if a.auto and results_root() is None:  # without the network logs the session cannot be known: never guess
+        message('EXPERIMENTER', f'{COMPUTER}: the results folder is not reachable:\n{CONFIG.get("results_dir")}\n\n'
+                                'Nothing was started. Check the network drive and start this PC again.')
+        sys.exit(1)
+    auto = automatic(plan, a.offset, a.session) if a.auto else None
     subject, session = auto or ask_participant(plan)
     stimulus, mapping = plan[(subject, session)]
     print(f'{COMPUTER}: participant {subject}, session {session}, {stimulus} {mapping}' + (' [TEST]' if a.test else ''))
@@ -240,6 +269,7 @@ def main():
     env = dict(os.environ, NUMEROSITY_LOG_ROOT=str(local_root()))
     cmds = commands(subject, session, stimulus, mapping)
     for phase in PHASES[PHASES.index(start):]:
+        write_status(subject, session, stimulus, mapping, phase)
         result = subprocess.run([sys.executable, str(HERE / cmds[phase][0]), *cmds[phase][1:]], cwd=HERE, env=env)
         copy_to_network(subject, session, stimulus)
         if result.returncode != 0:
@@ -256,6 +286,7 @@ def main():
     lines += [f'Total: {bonus + fee + completion:.2f} CHF', '', 'Please stay seated and raise your hand.']
     if not saved:
         lines += ['', '(Experimenter: results were NOT copied to the network; they are in ' + str(local_root()) + ')']
+    write_status(subject, session, stimulus, mapping, f'finished {bonus + fee + completion:.2f} CHF')
     message('Finished', '\n'.join(lines))
 
 

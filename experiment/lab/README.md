@@ -15,24 +15,26 @@
 
 ## LabControl (once)
 
-Settings: set *Mirror from* to your shortname. Then create two Custom Command experiments:
-- **numerosity A** (group on PCs 1–30): `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.bat --auto`
-- **numerosity B** (group on PCs 1–5): `C:\ExpFiles\<shortname>\numerosity_transform\experiment\lab.bat --auto --offset 30`
+Settings: set *Mirror from* to your shortname. Custom Command experiments (`<exp>` = `C:\ExpFiles\<shortname>\numerosity_transform\experiment`):
+- **numerosity A** (group on PCs 1–30): `<exp>\lab.bat --auto --session 1`
+- **numerosity B** (group on PCs 1–5): `<exp>\lab.bat --auto --offset 30 --session 1`
+- **numerosity TEST**: `<exp>\lab.bat --auto --test` (everything goes to `*_test` folders; never counts as a real session)
 
-- **numerosity TEST**: `...\lab.bat --auto --test` — same, but everything goes to `*_test` folders, so tests never
-  count as real sessions.
+`--auto`: nothing is clicked on the participant PCs. Participant = PC number (+ offset), so **every participant sits at
+the same PC in every session**. Stimulus and mapping come from `lab\participants.tsv`.
 
-With `--auto`, nothing is clicked on the participant PCs. Participant = PC number (+ offset), so **every participant
-sits at the same PC in every session**. The session and, after a crash, the phase are taken from the logs. Stimulus
-and mapping come from `lab\participants.tsv`. Without `--auto`, a dialog asks for the participant number.
+**Session failsafe.** Each PC works out the session from the logs on the network, and `--session` is what you expect.
+If they disagree, that PC shows an EXPERIMENTER dialog and starts nothing until you decide. If the network folder is
+unreachable, the PC refuses to start (it never guesses).
 
 ## Each session
 
-1. In LabControl, select **only the occupied PCs**, choose A or B, tick **Mirror Experiment Files**, then click
-   **Save and Start Clients**.
-2. Everything runs by itself. At the end, the screen shows the earnings and the participant raises their hand.
-3. Payment list: `lab_python\...\python.exe lab\payment_list.py <session>` (or `--all`).
-4. Copy `N:\client_write\<shortname>\numerosity_transform` to the project's `_behavioural_lab` folder.
+1. In LabControl Settings, set `--session` in the command to today's session.
+2. Select **only the occupied PCs**, choose A or B, tick **Mirror Experiment Files**, then click **Save and Start Clients**.
+3. On the ExpMaster, run **`status`**: a table of every PC with its participant, session, version and phase. Check it
+   before participants start, and keep it open (it warns if different sessions are running).
+4. Optionally run `collect -Watch` to copy data to the project folder every minute.
+5. At the end each screen shows the earnings. Payment list: `lab_python\...\python.exe lab\payment_list.py <session>`.
 
 **After a crash:** start `lab.py` again (on any PC) with the same number. It continues where it stopped.
 
